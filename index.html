@@ -662,94 +662,9 @@
                         const parsed = JSON.parse(item);
                         if (Array.isArray(parsed)) {
                             parsed.forEach(obj => {
-                                const uniqueKey = obj.id || `${obj.date}_${obj.desc}_${obj.amount}`;
-                                if (!seenIds.has(uniqueKey)) {
-                                    seenIds.add(uniqueKey);
-                                    combined.push(obj);
-                                }
-                            });
-                        }
-                    } catch(e) {}
-                }
-            });
-            return combined;
-        }
-
-        function getMergedObjectFromLocalStorage(possibleKeys) {
-            let combinedObj = {};
-            possibleKeys.forEach(key => {
-                const item = localStorage.getItem(key);
-                if (item) {
-                    try {
-                        const parsed = JSON.parse(item);
-                        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-                            combinedObj = { ...combinedObj, ...parsed };
-                        }
-                    } catch(e) {}
-                }
-            });
-            return combinedObj;
-        }
-
-        const recoveredTxs = getMergedArrayFromLocalStorage(['fin_txs', 'transactions', 'bsb_txs']);
-        const recoveredTransfers = getMergedArrayFromLocalStorage(['fin_transfers', 'transfers']);
-        const recoveredCats = getMergedArrayFromLocalStorage(['fin_cats', 'categories', 'bsb_cats']);
-        const recoveredAccs = getMergedArrayFromLocalStorage(['fin_accs', 'accountsList', 'accounts']);
-        const recoveredCards = getMergedArrayFromLocalStorage(['fin_cards', 'creditCards']);
-        const recoveredPix = getMergedArrayFromLocalStorage(['fin_pix', 'pixList']);
-        const recoveredVaults = getMergedArrayFromLocalStorage(['fin_vaults', 'vaultsList']);
-        const recoveredFixedBills = getMergedArrayFromLocalStorage(['fin_fixed_bills', 'fixedBills', 'bsb_rems']);
-        const recoveredRec = getMergedObjectFromLocalStorage(['fin_rec', 'bankReconciled']);
-        const recoveredGoals = getMergedObjectFromLocalStorage(['fin_goals', 'goals']);
-        const recoveredAnnualGoals = getMergedObjectFromLocalStorage(['fin_annual_goals', 'annualGoals']);
-
-        let state = {
-            transactions: recoveredTxs.length > 0 ? recoveredTxs : [],
-            transfers: recoveredTransfers.length > 0 ? recoveredTransfers : [],
-            categories: recoveredCats.length > 0 ? recoveredCats : DEFAULT_CATEGORIES,
-            fixedBills: recoveredFixedBills.length > 0 ? recoveredFixedBills : [
-                { id: 1, desc: "Internet da Loja", amount: 100.00, day: 1, category: "Manutenção" }
-            ],
-            goals: recoveredGoals,
-            annualGoals: recoveredAnnualGoals,
-            pixList: recoveredPix,
-            accountsList: recoveredAccs.length > 0 ? recoveredAccs : [
-                { id: 1, bank: "C6 (Bsb tech)", owner: "Aléxia", initialBalance: 5000, initialDate: "2026-10-21", purpose: "Principal Loja" }
-            ],
-            creditCards: recoveredCards.length > 0 ? recoveredCards : [],
-            bankReconciled: recoveredRec,
-            vaultsList: recoveredVaults,
-            hideValues: false
-        };
-
-        let currentTxTypeFilter = 'todos';
-        let currentGoalTableMode = 'month';
-        let chartInstance = null;
-        let projectionChartInstance = null;
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const now = new Date();
-            document.getElementById('filterPeriod').value = now.toISOString().slice(0, 7);
-            const todayStr = now.toISOString().slice(0, 10);
-            document.getElementById('txDate').value = todayStr;
-            document.getElementById('tfDate').value = todayStr;
-            document.getElementById('accInitialDate').value = todayStr;
-
-            populateAccountSelects();
-            populateCategoriesSelects();
-            checkUpcomingAlerts();
-            updateDashboard();
-            renderTransactionsTable();
-            renderFixedBillsTable();
-            loadSourceCodeIntoView();
-        });
-
-        function switchView(viewName, btnElement) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item button').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(`view-${viewName}`).classList.add('active');
-            btnElement.classList.add('active');
+                                const uniqueKey = obj.id || `${obj.date}_${obj.desc}_${obj.amount}`; if (!seenIds.has(uniqueKey)) { seenIds.add(uniqueKey); combined.push(obj); } }); } } catch(e) {} } }); return combined; }  function getMergedObjectFromLocalStorage(possibleKeys) { let combinedObj = {}; possibleKeys.forEach(key => { const item = localStorage.getItem(key); if (item) { try { const parsed = JSON.parse(item); if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) { combinedObj = { ...combinedObj, ...parsed }; } } catch(e) {} } }); return combinedObj; }  const recoveredTxs = getMergedArrayFromLocalStorage(['fin_txs', 'transactions', 'bsb_txs']); const recoveredTransfers = getMergedArrayFromLocalStorage(['fin_transfers', 'transfers']); const recoveredCats = getMergedArrayFromLocalStorage(['fin_cats', 'categories', 'bsb_cats']); const recoveredAccs = getMergedArrayFromLocalStorage(['fin_accs', 'accountsList', 'accounts']); const recoveredCards = getMergedArrayFromLocalStorage(['fin_cards', 'creditCards']); const recoveredPix = getMergedArrayFromLocalStorage(['fin_pix', 'pixList']); const recoveredVaults = getMergedArrayFromLocalStorage(['fin_vaults', 'vaultsList']); const recoveredFixedBills = getMergedArrayFromLocalStorage(['fin_fixed_bills', 'fixedBills', 'bsb_rems']); const recoveredRec = getMergedObjectFromLocalStorage(['fin_rec', 'bankReconciled']); const recoveredGoals = getMergedObjectFromLocalStorage(['fin_goals', 'goals']); const recoveredAnnualGoals = getMergedObjectFromLocalStorage(['fin_annual_goals', 'annualGoals']);  let state = { transactions: recoveredTxs.length > 0 ? recoveredTxs : [], transfers: recoveredTransfers.length > 0 ? recoveredTransfers : [], categories: recoveredCats.length > 0 ? recoveredCats : DEFAULT_CATEGORIES, fixedBills: recoveredFixedBills.length > 0 ? recoveredFixedBills : [ { id: 1, desc: "Internet da Loja", amount: 100.00, day: 1, category: "Manutenção" } ], goals: recoveredGoals, annualGoals: recoveredAnnualGoals, pixList: recoveredPix, accountsList: recoveredAccs.length > 0 ? recoveredAccs : [ { id: 1, bank: "C6 (Bsb tech)", owner: "Aléxia", initialBalance: 5000, initialDate: "2026-10-21", purpose: "Principal Loja" } ], creditCards: recoveredCards.length > 0 ? recoveredCards : [], bankReconciled: recoveredRec, vaultsList: recoveredVaults, hideValues: false };  let currentTxTypeFilter = 'todos'; let currentGoalTableMode = 'month'; let chartInstance = null; let projectionChartInstance = null;  document.addEventListener("DOMContentLoaded", () => { const now = new Date(); const periodInput = document.getElementById('filterPeriod'); if (periodInput && !periodInput.value) { periodInput.value = now.toISOString().slice(0, 7); } const todayStr = now.toISOString().slice(0, 10);  const txDate = document.getElementById('txDate'); if (txDate) txDate.value = todayStr; const tfDate = document.getElementById('tfDate'); if (tfDate) tfDate.value = todayStr; const accDate = document.getElementById('accInitialDate'); if (accDate) accDate.value = todayStr;  populateAccountSelects(); populateCategoriesSelects(); checkUpcomingAlerts(); updateDashboard(); renderTransactionsTable(); renderFixedBillsTable(); loadSourceCodeIntoView(); });  function switchView(viewName, btnElement) { document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.querySelectorAll('.nav-item button').forEach(el => el.classList.remove('active'));  const targetSection = document.getElementById(`view-${viewName}`);
+            if (targetSection) targetSection.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
 
             if (viewName === 'dashboard') updateDashboard();
             if (viewName === 'transactions') renderTransactionsTable();
@@ -766,8 +681,11 @@
 
         function togglePrivacy() {
             state.hideValues = !state.hideValues;
-            document.getElementById('privacyIcon').innerText = state.hideValues ? '🙈' : '👁️';
-            document.getElementById('privacyText').innerText = state.hideValues ? 'Mostrar' : 'Ocultar';
+            const icon = document.getElementById('privacyIcon');
+            const text = document.getElementById('privacyText');
+            if (icon) icon.innerText = state.hideValues ? '🙈' : '👁️';
+            if (text) text.innerText = state.hideValues ? 'Mostrar' : 'Ocultar';
+            
             updateDashboard();
             renderTransactionsTable();
             renderFixedBillsTable();
@@ -825,66 +743,7 @@
             [sel, fbSel].forEach(select => {
                 if (!select) return;
                 select.innerHTML = '';
-                state.categories.forEach(c => select.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`));
-            });
-        }
-
-        function checkUpcomingAlerts() {
-            const today = new Date();
-            const currentDay = today.getDate();
-
-            let hasUpcoming = false;
-            state.fixedBills.forEach(fb => {
-                const diffDays = fb.day - currentDay;
-                if (diffDays >= 0 && diffDays <= 5) {
-                    hasUpcoming = true;
-                }
-            });
-
-            const banner = document.getElementById('upcomingAlertBanner');
-            if (hasUpcoming) {
-                document.getElementById('upcomingAlertText').innerText = "Atenção: Você tem contas fixas vencendo hoje ou nos próximos dias!";
-                banner.style.display = 'flex';
-            } else {
-                banner.style.display = 'none';
-            }
-        }
-
-        function toggleParcelasInput(val) {
-            document.getElementById('parcelasGroup').style.display = (val === 'parcelado') ? 'flex' : 'none';
-        }
-
-        // --- LANÇAMENTOS ---
-        function setTxFilter(type, btn) {
-            currentTxTypeFilter = type;
-            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderTransactionsTable();
-        }
-
-        function addTransaction(e) {
-            e.preventDefault();
-            const desc = document.getElementById('txDesc').value;
-            const amount = parseFloat(document.getElementById('txAmount').value);
-            const type = document.getElementById('txType').value;
-            const recurrence = document.getElementById('txRecurrence').value;
-            const account = document.getElementById('txAccountSelect').value;
-            const category = document.getElementById('txCategory').value;
-            const startDate = document.getElementById('txDate').value;
-            const status = document.getElementById('txStatus').value;
-
-            if (recurrence === 'parcelado') {
-                const installments = parseInt(document.getElementById('txInstallments').value) || 2;
-                const parcelAmount = amount / installments;
-                let dateObj = new Date(startDate + 'T00:00:00');
-
-                for (let i = 1; i <= installments; i++) {
-                    const iterDate = new Date(dateObj);
-                    iterDate.setMonth(dateObj.getMonth() + (i - 1));
-
-                    state.transactions.push({
-                        id: Date.now() + i,
-                        desc: `${desc} (${i}/${installments})`,
+                state.categories.forEach(c => select.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`)); }); }  function checkUpcomingAlerts() { const today = new Date(); const currentDay = today.getDate();  let hasUpcoming = false; state.fixedBills.forEach(fb => { const diffDays = fb.day - currentDay; if (diffDays >= 0 && diffDays <= 5) { hasUpcoming = true; } });  const banner = document.getElementById('upcomingAlertBanner'); if (banner) { if (hasUpcoming) { const alertText = document.getElementById('upcomingAlertText'); if (alertText) alertText.innerText = "Atenção: Você tem contas fixas vencendo hoje ou nos próximos dias!"; banner.style.display = 'flex'; } else { banner.style.display = 'none'; } } }  function toggleParcelasInput(val) { const group = document.getElementById('parcelasGroup'); if (group) group.style.display = (val === 'parcelado') ? 'flex' : 'none'; }  // --- LANÇAMENTOS --- function setTxFilter(type, btn) { currentTxTypeFilter = type; document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active')); if (btn) btn.classList.add('active'); renderTransactionsTable(); }  function addTransaction(e) { e.preventDefault(); const desc = document.getElementById('txDesc').value; const amount = parseFloat(document.getElementById('txAmount').value); const type = document.getElementById('txType').value; const recurrence = document.getElementById('txRecurrence').value; const account = document.getElementById('txAccountSelect').value; const category = document.getElementById('txCategory').value; const startDate = document.getElementById('txDate').value; const status = document.getElementById('txStatus').value;  if (recurrence === 'parcelado') { const installments = parseInt(document.getElementById('txInstallments').value) \vert{}\vert{} 2; const parcelAmount = amount / installments; let dateObj = new Date(startDate + 'T00:00:00');  for (let i = 1; i <= installments; i++) { const iterDate = new Date(dateObj); iterDate.setMonth(dateObj.getMonth() + (i - 1));  state.transactions.push({ id: Date.now() + i, desc: `${desc} (${i}/${installments})`,
                         amount: parcelAmount,
                         type, account, category,
                         date: iterDate.toISOString().slice(0, 10),
@@ -903,8 +762,10 @@
             }
 
             saveState();
-            document.getElementById('transactionForm').reset();
-            document.getElementById('txDate').value = new Date().toISOString().slice(0, 10);
+            const form = document.getElementById('transactionForm');
+            if (form) form.reset();
+            const txDateInput = document.getElementById('txDate');
+            if (txDateInput) txDateInput.value = new Date().toISOString().slice(0, 10);
             
             checkUpcomingAlerts();
             renderTransactionsTable();
@@ -924,6 +785,7 @@
 
         function renderTransactionsTable() {
             const tbody = document.getElementById('transactionsTable');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
             let filtered = [...state.transactions];
@@ -944,7 +806,7 @@
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr>
                         <td>${tx.date ? tx.date.split('-').reverse().join('/') : '-'}</td>
-                        <td><strong>${tx.desc}</strong> ${tx.recurrence === 'fixo' ? '<small style="color:var(--primary);">(Fixo)</small>' : ''}</td>
+                        <td><strong>${tx.desc}</strong>${tx.recurrence === 'fixo' ? '<small style="color:var(--primary);">(Fixo)</small>' : ''}</td>
                         <td>${tx.account || 'Geral'}</td>
                         <td><span class="cat-clickable" onclick="openCatModal('${tx.category}')">${tx.category}</span></td>
                         <td>
@@ -953,7 +815,7 @@
                             </button>
                         </td>
                         <td style="font-weight:700; color: ${tx.type === 'receita' ? 'var(--success)' : 'var(--danger)'}">
-                            ${tx.type === 'receita' ? '+' : '-'} ${formatCurrency(tx.amount)}
+                            ${tx.type === 'receita' ? '+' : '-'}${formatCurrency(tx.amount)}
                         </td>
                         <td><button class="btn-danger-sm" onclick="state.transactions=state.transactions.filter(x=>x.id!=${tx.id});saveState();checkUpcomingAlerts();renderTransactionsTable();updateDashboard();">🗑️</button></td>
                     </tr>
@@ -1018,7 +880,7 @@
                     statusText = "🚨 VENCE HOJE!";
                     statusColor = "var(--danger)";
                 } else if (diffDays > 0 && diffDays <= 5) {
-                    statusText = `⚠️ Vence em ${diffDays} dia(s) (Dia ${fb.day})`;
+                    statusText = `⚠️ Vence em ${diffDays} dia(s) (Dia${fb.day})`;
                     statusColor = "var(--warning)";
                 } else if (diffDays < 0) {
                     statusText = `Passou do dia ${fb.day} (Mês atual)`;
@@ -1059,7 +921,8 @@
             if (!grid) return;
             grid.innerHTML = '';
 
-            const currentMonthStr = document.getElementById('filterPeriod').value;
+            const periodInput = document.getElementById('filterPeriod');
+            const currentMonthStr = periodInput ? periodInput.value : new Date().toISOString().slice(0, 7);
 
             state.creditCards.forEach(c => {
                 const cardAccName = `Cartão: ${c.name}`;
@@ -1082,7 +945,7 @@
                         </div>
 
                         <div style="font-size:0.8rem; color:var(--text-muted); border-top:1px solid var(--border); padding-top:8px; margin-top:4px;">
-                            Fecha dia: <strong>${c.closingDay}</strong> | Vence dia: <strong>${c.dueDay}</strong>
+                            Fecha dia: <strong>${c.closingDay}</strong> \vert{} Vence dia: <strong>${c.dueDay}</strong>
                         </div>
                     </div>
                 `);
@@ -1091,7 +954,9 @@
 
         // --- PROJEÇÃO ---
         function renderProjectionChart() {
-            const ctx = document.getElementById('projectionChart').getContext('2d');
+            const canvasEl = document.getElementById('projectionChart');
+            if (!canvasEl) return;
+            const ctx = canvasEl.getContext('2d');
             const monthsLabels = [];
             const inflowsData = [];
             const outflowsData = [];
@@ -1233,6 +1098,7 @@
         function openAccountStatement(accName) {
             document.getElementById('modalAccTitle').innerText = `📑 Extrato Completo: ${accName}`;
             const tbody = document.getElementById('modalAccountStatementTable');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             const txs = state.transactions.filter(t => t.account === accName).map(t => ({ ...t, isTransfer: false }));
@@ -1260,7 +1126,7 @@
                             <td>${st.category}</td>
                             <td><span class="tag-type tag-${st.type}">${st.type}</span></td>
                             <td style="font-weight:700; color:${st.type === 'receita' ? 'var(--success)' : 'var(--danger)'}">
-                                ${st.type === 'receita' ? '+' : '-'} ${formatCurrency(st.amount)}
+                                ${st.type === 'receita' ? '+' : '-'}${formatCurrency(st.amount)}
                             </td>
                         </tr>
                     `);
@@ -1272,8 +1138,10 @@
 
         // --- DASHBOARD & METAS ---
         function filterTransactionsByPeriod(txs) {
-            const mode = document.getElementById('viewMode').value;
-            const periodVal = document.getElementById('filterPeriod').value;
+            const modeEl = document.getElementById('viewMode');
+            const periodEl = document.getElementById('filterPeriod');
+            const mode = modeEl ? modeEl.value : 'month';
+            const periodVal = periodEl ? periodEl.value : '';
             if (!periodVal) return txs;
 
             return txs.filter(tx => {
@@ -1290,9 +1158,13 @@
             const inflows = filteredTxs.filter(t => t.type === 'receita').reduce((a, t) => a + t.amount, 0);
             const outflows = filteredTxs.filter(t => t.type === 'despesa').reduce((a, t) => a + t.amount, 0);
 
-            document.getElementById('totalInflows').innerText = formatCurrency(inflows);
-            document.getElementById('totalOutflows').innerText = formatCurrency(outflows);
-            document.getElementById('totalBalance').innerText = formatCurrency(inflows - outflows);
+            const infEl = document.getElementById('totalInflows');
+            const outEl = document.getElementById('totalOutflows');
+            const balEl = document.getElementById('totalBalance');
+
+            if (infEl) infEl.innerText = formatCurrency(inflows);
+            if (outEl) outEl.innerText = formatCurrency(outflows);
+            if (balEl) balEl.innerText = formatCurrency(inflows - outflows);
 
             renderDashGoals(filteredTxs);
             renderDashFixedBills();
@@ -1300,7 +1172,8 @@
         }
 
         function renderDashGoals(filteredTxs) {
-            const periodVal = document.getElementById('filterPeriod').value.slice(0, 7);
+            const periodEl = document.getElementById('filterPeriod');
+            const periodVal = periodEl && periodEl.value ? periodEl.value.slice(0, 7) : new Date().toISOString().slice(0, 7);
             const currentGoals = state.goals[periodVal] || {};
             const container = document.getElementById('dashGoalsList');
             if (!container) return;
@@ -1319,10 +1192,10 @@
                     <div>
                         <div style="display:flex; justify-content:space-between; font-size:0.9rem; font-weight:600;">
                             <span class="cat-clickable" onclick="openCatModal('${cat}')">${cat}</span>
-                            <span>${formatCurrency(spent)} / ${goal > 0 ? formatCurrency(goal) : 'Sem Meta'}</span>
+                            <span>${formatCurrency(spent)} /${goal > 0 ? formatCurrency(goal) : 'Sem Meta'}</span>
                         </div>
                         <div style="width:100%; height:8px; background:#f1f5f9; border-radius:999px; overflow:hidden; margin-top:4px;">
-                            <div class="${pClass}" style="height:100%; width:${goal > 0 ? percentage : (spent > 0 ? 100 : 0)}%"></div>
+                            <div class="${pClass}" style="height:100\%; width:${goal > 0 ? percentage : (spent > 0 ? 100 : 0)}%"></div>
                         </div>
                     </div>
                 `);
@@ -1330,7 +1203,9 @@
         }
 
         function renderChart(filteredTxs) {
-            const ctx = document.getElementById('categoryChart').getContext('2d');
+            const canvasEl = document.getElementById('categoryChart');
+            if (!canvasEl) return;
+            const ctx = canvasEl.getContext('2d');
             const catMap = {};
             filteredTxs.filter(t => t.type === 'despesa').forEach(t => {
                 catMap[t.category] = (catMap[t.category] || 0) + t.amount;
@@ -1350,39 +1225,45 @@
 
         function addCategory(e) {
             e.preventDefault();
-            const name = document.getElementById('newCatName').value.trim();
+            const nameInput = document.getElementById('newCatName');
+            if (!nameInput) return;
+            const name = nameInput.value.trim();
             if (name && !state.categories.includes(name)) {
                 state.categories.push(name);
                 saveState();
                 populateCategoriesSelects();
                 renderGoalsTable();
-                document.getElementById('newCatName').value = '';
+                nameInput.value = '';
             }
         }
 
         function setGoalViewMode(mode, btn) {
             currentGoalTableMode = mode;
-            document.getElementById('btnGoalMonth').classList.remove('active');
-            document.getElementById('btnGoalYear').classList.remove('active');
-            btn.classList.add('active');
+            const btnMonth = document.getElementById('btnGoalMonth');
+            const btnYear = document.getElementById('btnGoalYear');
+            if (btnMonth) btnMonth.classList.remove('active');
+            if (btnYear) btnYear.classList.remove('active');
+            if (btn) btn.classList.add('active');
 
             const headerTr = document.getElementById('goalsHeader');
-            if (mode === 'month') {
-                headerTr.innerHTML = `
-                    <th>Categoria</th>
-                    <th>Meta Mês Atual (R$)</th>
-                    <th>Gasto Realizado</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                `;
-            } else {
-                headerTr.innerHTML = `
-                    <th>Categoria</th>
-                    <th>Teto Anual (R$)</th>
-                    <th>Total Acumulado no Ano</th>
-                    <th>Status Anual</th>
-                    <th>Ação</th>
-                `;
+            if (headerTr) {
+                if (mode === 'month') {
+                    headerTr.innerHTML = `
+                        <th>Categoria</th>
+                        <th>Meta Mês Atual (R$)</th>
+                        <th>Gasto Realizado</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    `;
+                } else {
+                    headerTr.innerHTML = `
+                        <th>Categoria</th>
+                        <th>Teto Anual (R$)</th>
+                        <th>Total Acumulado no Ano</th>
+                        <th>Status Anual</th>
+                        <th>Ação</th>
+                    `;
+                }
             }
             renderGoalsTable();
         }
@@ -1391,7 +1272,8 @@
             const tbody = document.getElementById('goalsTable');
             if (!tbody) return;
             tbody.innerHTML = '';
-            const periodVal = document.getElementById('filterPeriod').value;
+            const periodEl = document.getElementById('filterPeriod');
+            const periodVal = periodEl && periodEl.value ? periodEl.value : new Date().toISOString().slice(0, 7);
             const monthStr = periodVal.slice(0, 7);
             const yearStr = periodVal.slice(0, 4);
 
@@ -1406,300 +1288,4 @@
                     tbody.insertAdjacentHTML('beforeend', `
                         <tr>
                             <td><strong class="cat-clickable" onclick="openCatModal('${cat}')">${cat}</strong></td>
-                            <td><input type="number" step="50" min="0" value="${goal}" onchange="if(!state.goals['${monthStr}']) state.goals['${monthStr}']={}; state.goals['${monthStr}']['${cat}']=parseFloat(this.value)||0; saveState();" style="width:100px; padding:4px;"></td>
-                            <td>${formatCurrency(spent)}</td>
-                            <td>${goal > 0 ? (spent > goal ? '<span style="color:red; font-weight:bold;">Estourou</span>' : '<span style="color:var(--success); font-weight:bold;">Dentro da Meta</span>') : '<span style="color:var(--text-muted)">Sem Meta</span>'}</td>
-                            <td><button class="btn-danger-sm" onclick="state.categories=state.categories.filter(c=>c!=='${cat}');saveState();populateCategoriesSelects();renderGoalsTable();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            } else {
-                const currentYearGoals = state.annualGoals[yearStr] || {};
-                const yearTxs = state.transactions.filter(t => t.date && t.date.startsWith(yearStr) && t.type === 'despesa');
-
-                state.categories.forEach(cat => {
-                    const goalAnual = currentYearGoals[cat] || 0;
-                    const spentYear = yearTxs.filter(t => t.category === cat).reduce((a, t) => a + t.amount, 0);
-
-                    tbody.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td><strong class="cat-clickable" onclick="openCatModal('${cat}')">${cat}</strong></td>
-                            <td><input type="number" step="100" min="0" value="${goalAnual}" onchange="if(!state.annualGoals['${yearStr}']) state.annualGoals['${yearStr}']={}; state.annualGoals['${yearStr}']['${cat}']=parseFloat(this.value)||0; saveState();" style="width:110px; padding:4px;"></td>
-                            <td>${formatCurrency(spentYear)}</td>
-                            <td>${goalAnual > 0 ? (spentYear > goalAnual ? '<span style="color:red; font-weight:bold;">Estourou Teto Anual</span>' : '<span style="color:var(--success); font-weight:bold;">Ok no Ano</span>') : '<span style="color:var(--text-muted)">Sem Teto</span>'}</td>
-                            <td><button class="btn-danger-sm" onclick="state.categories=state.categories.filter(c=>c!=='${cat}');saveState();populateCategoriesSelects();renderGoalsTable();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            }
-        }
-
-        // --- MODAIS ---
-        function openCatModal(catName) {
-            const periodVal = document.getElementById('filterPeriod').value;
-            const monthStr = periodVal.slice(0, 7);
-            const yearStr = periodVal.slice(0, 4);
-
-            document.getElementById('modalCatTitle').innerText = `📊 Detalhamento: ${catName}`;
-
-            const monthSpent = state.transactions
-                .filter(t => t.date && t.date.startsWith(monthStr) && t.category === catName && t.type === 'despesa')
-                .reduce((a, t) => a + t.amount, 0);
-            const monthGoal = (state.goals[monthStr] || {})[catName] || 0;
-
-            document.getElementById('modalMonthSpent').innerText = formatCurrency(monthSpent);
-            document.getElementById('modalMonthGoalText').innerText = `Meta Mês: ${monthGoal > 0 ? formatCurrency(monthGoal) : 'Sem Meta'}`;
-
-            const yearSpent = state.transactions
-                .filter(t => t.date && t.date.startsWith(yearStr) && t.category === catName && t.type === 'despesa')
-                .reduce((a, t) => a + t.amount, 0);
-            const yearGoal = (state.annualGoals[yearStr] || {})[catName] || 0;
-
-            document.getElementById('modalYearSpent').innerText = formatCurrency(yearSpent);
-            document.getElementById('modalYearGoalText').innerText = `Teto Anual: ${yearGoal > 0 ? formatCurrency(yearGoal) : 'Sem Teto'}`;
-
-            const adviceBox = document.getElementById('modalAdviceBox');
-            if (yearGoal > 0) {
-                const remainingYear = yearGoal - yearSpent;
-                const currentMonthNum = parseInt(monthStr.split('-')[1]);
-                const remainingMonths = 12 - currentMonthNum + 1;
-                const monthlyAllowance = remainingYear > 0 ? (remainingYear / remainingMonths) : 0;
-
-                if (remainingYear <= 0) {
-                    adviceBox.innerHTML = `⚠️ <strong>Atenção:</strong> Você atingiu/estourou o teto de <strong>${formatCurrency(yearGoal)}</strong> previsto para o ano de ${yearStr}.`;
-                } else {
-                    adviceBox.innerHTML = `💡 Tem <strong>${formatCurrency(remainingYear)}</strong> disponíveis no teto de ${yearStr}. A média ideal para não estourar é gastar até <strong>${formatCurrency(monthlyAllowance)}/mês</strong> nos ${remainingMonths} meses restantes.`;
-                }
-            } else {
-                adviceBox.innerHTML = `💡 Defina um <strong>Teto Anual</strong> para a categoria <strong>${catName}</strong> na aba de Metas para receber projeções personalizadas.`;
-            }
-
-            const tbody = document.getElementById('modalHistoryTable');
-            tbody.innerHTML = '';
-            const monthsNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-            
-            for (let i = 1; i <= 12; i++) {
-                const mTwoDigits = i < 10 ? `0${i}` : `${i}`;
-                const iterMonthStr = `${yearStr}-${mTwoDigits}`;
-
-                const mSpent = state.transactions
-                    .filter(t => t.date && t.date.startsWith(iterMonthStr) && t.category === catName && t.type === 'despesa')
-                    .reduce((a, t) => a + t.amount, 0);
-                const mGoal = (state.goals[iterMonthStr] || {})[catName] || 0;
-
-                tbody.insertAdjacentHTML('beforeend', `
-                    <tr>
-                        <td><strong>${monthsNames[i-1]} / ${yearStr}</strong></td>
-                        <td>${formatCurrency(mSpent)}</td>
-                        <td>${mGoal > 0 ? formatCurrency(mGoal) : '-'}</td>
-                        <td>${mGoal > 0 ? (mSpent > mGoal ? '<span style="color:red">Estourou</span>' : '<span style="color:var(--success)">Ok</span>') : '-'}</td>
-                    </tr>
-                `);
-            }
-
-            document.getElementById('catModalOverlay').classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        // --- CONTAS, CARTÕES & PIX ---
-        function addBankAccount(e) {
-            e.preventDefault();
-            state.accountsList.push({
-                id: Date.now(),
-                bank: document.getElementById('accBank').value,
-                owner: document.getElementById('accOwner').value,
-                initialBalance: parseFloat(document.getElementById('accInitialBalance').value) || 0,
-                initialDate: document.getElementById('accInitialDate').value,
-                purpose: document.getElementById('accPurpose').value
-            });
-            saveState();
-            populateAccountSelects();
-            renderAccountsAndPix();
-            e.target.reset();
-        }
-
-        function addPix(e) {
-            e.preventDefault();
-            state.pixList.push({
-                id: Date.now(),
-                owner: document.getElementById('pixOwner').value,
-                bank: document.getElementById('pixBank').value,
-                key: document.getElementById('pixKey').value
-            });
-            saveState();
-            renderAccountsAndPix();
-            e.target.reset();
-        }
-
-        function renderAccountsAndPix() {
-            const aTable = document.getElementById('accountsTable');
-            if (aTable) {
-                aTable.innerHTML = '';
-                state.accountsList.forEach(a => {
-                    aTable.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td><strong>${a.bank}</strong></td>
-                            <td>${a.owner}</td>
-                            <td>${a.initialDate ? a.initialDate.split('-').reverse().join('/') : '-'}</td>
-                            <td>${formatCurrency(a.initialBalance || 0)}</td>
-                            <td>${a.purpose}</td>
-                            <td><button class="btn-danger-sm" onclick="state.accountsList=state.accountsList.filter(x=>x.id!=${a.id});saveState();populateAccountSelects();renderAccountsAndPix();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            }
-
-            const pTable = document.getElementById('pixTable');
-            if (pTable) {
-                pTable.innerHTML = '';
-                state.pixList.forEach(p => {
-                    pTable.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td>${p.owner}</td>
-                            <td>${p.bank}</td>
-                            <td><code>${p.key}</code> <button class="btn-outline" style="padding:2px 6px; font-size:0.75rem" onclick="navigator.clipboard.writeText('${p.key}')">Copiar</button></td>
-                            <td><button class="btn-danger-sm" onclick="state.pixList=state.pixList.filter(x=>x.id!=${p.id});saveState();renderAccountsAndPix();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            }
-        }
-
-        // --- CAIXINHAS ---
-        function addVault(e) {
-            e.preventDefault();
-            state.vaultsList.push({
-                id: Date.now(),
-                name: document.getElementById('vaultName').value,
-                current: parseFloat(document.getElementById('vaultCurrent').value),
-                goal: parseFloat(document.getElementById('vaultGoal').value),
-                monthlyDeposit: parseFloat(document.getElementById('vaultMonthlyDeposit').value) || 0,
-                history: []
-            });
-            saveState();
-            renderVaults();
-            e.target.reset();
-        }
-
-        function depositVault(id) {
-            const val = parseFloat(prompt("Quanto deseja guardar nesta caixinha (R$)?"));
-            if (val && val > 0) {
-                const vault = state.vaultsList.find(v => v.id === id);
-                if (vault) {
-                    vault.current += val;
-                    if (!vault.history) vault.history = [];
-                    vault.history.push({ date: new Date().toISOString().slice(0, 10), amount: val, type: 'deposit' });
-                    saveState();
-                    renderVaults();
-                }
-            }
-        }
-
-        function withdrawVault(id) {
-            const val = parseFloat(prompt("Quanto deseja retirar desta caixinha (R$)?"));
-            if (val && val > 0) {
-                const vault = state.vaultsList.find(v => v.id === id);
-                if (vault) {
-                    if (val > vault.current) {
-                        alert("O valor de retirada é maior do que o saldo guardado!");
-                        return;
-                    }
-                    vault.current -= val;
-                    if (!vault.history) vault.history = [];
-                    vault.history.push({ date: new Date().toISOString().slice(0, 10), amount: val, type: 'withdraw' });
-                    saveState();
-                    renderVaults();
-                }
-            }
-        }
-
-        function renderVaults() {
-            const grid = document.getElementById('vaultsGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            state.vaultsList.forEach(v => {
-                const pct = Math.min(Math.round((v.current / v.goal) * 100), 100);
-                const remainingVal = Math.max(v.goal - v.current, 0);
-
-                let monthsToGoalText = "Alcançado!";
-                if (remainingVal > 0) {
-                    if (v.monthlyDeposit && v.monthlyDeposit > 0) {
-                        const monthsNeeded = Math.ceil(remainingVal / v.monthlyDeposit);
-                        monthsToGoalText = `Faltam aprox. <strong>${monthsNeeded} meses</strong> guardando ${formatCurrency(v.monthlyDeposit)}/mês`;
-                    } else {
-                        monthsToGoalText = "Informe o aporte mensal para ver a previsão";
-                    }
-                }
-
-                grid.insertAdjacentHTML('beforeend', `
-                    <div class="card-panel" style="position:relative; display:flex; flex-direction:column; gap:8px;">
-                        <button class="btn-danger-sm" style="position:absolute; top:16px; right:16px;" onclick="if(confirm('Excluir esta caixinha?')){state.vaultsList=state.vaultsList.filter(x=>x.id!=${v.id});saveState();renderVaults();}">🗑️</button>
-                        
-                        <span style="font-weight:700; color:var(--text-muted); text-transform:uppercase; font-size:0.85rem;">🐷 ${v.name}</span>
-                        <span style="font-size:1.8rem; font-weight:700; color:var(--primary);">${formatCurrency(v.current)}</span>
-                        
-                        <span style="font-size:0.85rem; color:var(--text-muted);">Meta: ${formatCurrency(v.goal)} (${pct}%)</span>
-                        
-                        <div style="width:100%; height:10px; background:#f1f5f9; border-radius:999px; overflow:hidden; margin: 4px 0 6px 0;">
-                            <div style="height:100%; width:${pct}%; background-color:var(--success);"></div>
-                        </div>
-
-                        <div style="font-size:0.78rem; color:#1e40af; background:var(--primary-light); padding:6px 10px; border-radius:6px; margin-bottom:8px;">
-                            🔮 ${monthsToGoalText}
-                        </div>
-
-                        <div style="display:flex; gap:8px;">
-                            <button class="btn-primary" style="flex:1; padding:6px 10px; font-size:0.8rem;" onclick="depositVault(${v.id})">➕ Guardar +R$</button>
-                            <button class="btn-outline" style="flex:1; padding:6px 10px; font-size:0.8rem; color:var(--danger);" onclick="withdrawVault(${v.id})">➖ Retirar -R$</button>
-                        </div>
-                    </div>
-                `);
-            });
-        }
-
-        // --- BACKUP & CÓDIGO ---
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
-            const a = document.createElement('a');
-            a.href = dataStr;
-            a.download = `backup_bsb_finance_${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-        }
-
-        function importData(e) {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                try {
-                    state = JSON.parse(evt.target.result);
-                    saveState();
-                    populateAccountSelects();
-                    populateCategoriesSelects();
-                    checkUpcomingAlerts();
-                    updateDashboard();
-                    renderTransactionsTable();
-                    renderFixedBillsTable();
-                    alert('Backup restaurado com sucesso!');
-                } catch { alert('Arquivo de backup inválido.'); }
-            };
-            reader.readAsText(e.target.files[0]);
-        }
-
-        function loadSourceCodeIntoView() {
-            const box = document.getElementById('sourceCodeBox');
-            if (box) {
-                box.value = document.documentElement.outerHTML;
-            }
-        }
-
-        function copySourceCode() {
-            const box = document.getElementById('sourceCodeBox');
-            box.select();
-            document.execCommand('copy');
-            alert('Código fonte copiado! Podes colar diretamente no GitHub.');
-        }
-    </script>
-</body>
-</html>
+                            <td><input type="number" step="50" min="0" value="${goal}" onchange="if(!state.goals['${monthStr}']) state
