@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSB Finance 🧬 - Gestão & Controle da Bsb tech e print</title>
+    <title>BSB Finance 🖨️ - Gestão & Controle da Bsb tech e print</title>
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -496,4 +496,102 @@
         <section id="view-accounts" class="view-section">
             <div class="card-panel">
                 <h2>Cadastrar Contas Bancárias (com Saldo Inicial)</h2>
-                <form onsubmit="add
+                <form onsubmit="addBankAccount(event)" style="margin-bottom: 16px;">
+                    <div class="form-grid">
+                        <input type="text" id="accBank" placeholder="Nome do Banco / Conta" required>
+                        <input type="text" id="accOwner" placeholder="Titular" required>
+                        <input type="number" id="accInitialBalance" step="0.01" placeholder="Saldo Inicial (R$)" required>
+                        <input type="date" id="accInitialDate" required>
+                        <input type="text" id="accPurpose" placeholder="Finalidade (ex: Conta da Loja)" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Salvar Conta</button>
+                </form>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Banco/Conta</th><th>Titular</th><th>Data Inicial</th><th>Saldo Inicial</th><th>Finalidade</th><th>Ação</th></tr>
+                        </thead>
+                        <tbody id="accountsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-panel">
+                <h2>Chaves Pix Cadastradas</h2>
+                <form onsubmit="addPix(event)" style="margin-bottom: 16px;">
+                    <div class="form-grid">
+                        <input type="text" id="pixOwner" placeholder="Titular" required>
+                        <input type="text" id="pixBank" placeholder="Banco" required>
+                        <input type="text" id="pixKey" placeholder="Chave Pix" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Adicionar Pix</button>
+                </form>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Titular</th><th>Banco</th><th>Chave</th><th>Ação</th></tr></thead>
+                        <tbody id="pixTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA 10: CAIXINHAS & OBJETIVOS -->
+        <section id="view-vaults" class="view-section">
+            <div class="card-panel">
+                <h2>Suas Caixinhas & Objetivos da Loja</h2>
+                <form onsubmit="addVault(event)" style="margin-bottom: 20px;">
+                    <div class="form-grid">
+                        <input type="text" id="vaultName" placeholder="Nome da Caixinha (ex: Nova Laser, Reforma)" required>
+                        <input type="number" id="vaultCurrent" step="0.01" placeholder="Valor Guardado Atual (R$)" required>
+                        <input type="number" id="vaultGoal" step="0.01" placeholder="Meta Final (R$)" required>
+                        <input type="number" id="vaultMonthlyDeposit" step="10" placeholder="Aporte Mensal Previsto (R$)" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Criar Caixinha</button>
+                </form>
+                <div id="vaultsGrid" class="metrics-grid"></div>
+            </div>
+        </section>
+
+        <!-- TELA 11: CONFIGURAÇÕES & CÓDIGO FONTE -->
+        <section id="view-settings" class="view-section">
+            <div class="card-panel">
+                <h2>⚙️ Gestão de Dados & Backup</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+                    Faça o download regular de um backup em formato JSON para garantir que nunca perde os seus registros financeiros inseridos.
+                </p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn-primary" onclick="exportData()">📥 Exportar Backup Completo (JSON)</button>
+                    <button class="btn-outline" onclick="document.getElementById('importFileSettings').click()">📤 Importar Backup</button>
+                    <input type="file" id="importFileSettings" style="display:none" onchange="importData(event)">
+                </div>
+            </div>
+
+            <div class="card-panel">
+                <h2>💻 Código Fonte do Site (Para Alterações Futuras)</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+                    Pode copiar todo o código atual do site diretamente daqui sempre que precisar de alterar algo no GitHub, sem precisar de procurar conversas antigas.
+                </p>
+                <button class="btn-primary" onclick="copySourceCode()" style="margin-bottom: 12px;">📋 Copiar Código Fonte Completo</button>
+                <textarea id="sourceCodeBox" readonly style="width: 100%; height: 200px; padding: 12px; font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-body); outline: none; cursor: text; user-select: text;" onclick="this.select()"></textarea>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL 1: DETALHAMENTO DE CATEGORIA (RAIO-X) -->
+    <div id="catModalOverlay" class="modal-overlay">
+        <div class="modal-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modalCatTitle" style="font-size: 1.3rem; color: var(--primary);">Categoria</h2>
+                <button onclick="closeModal('catModalOverlay')" class="btn-outline" style="padding: 4px 10px;">✕ Fechar</button>
+            </div>
+            
+            <div class="metrics-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="metric-card">
+                    <span class="title">Gasto Mês Atual</span>
+                    <span id="modalMonthSpent" class="amount outflows">R$ 0,00</span>
+                    <span id="modalMonthGoalText" style="font-size: 0.8rem; color: var(--text-muted);">Meta: R$ 0,00</span>
+                </div>
+                <div class="metric-card">
+                    <span class="title">Gasto Acumulado no Ano</span>
+                    <span id="modalYearSpent" class="amount outflows">R$ 0,00</span>
+                    <span id="modalYearGoalText" style="font-size: 0.8rem; color: var(--text-muted);">Teto Anual: R$ 0,
