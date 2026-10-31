@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lisossomos 🧬 - Digerindo Boletos & Controlando o Saldo</title>
+    <title>BSB Finance 🖨️ - Gestão & Controle da Bsb tech e print</title>
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -12,8 +12,8 @@
             --bg-card: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary: #2563eb;
-            --primary-light: #eff6ff;
+            --primary: #0284c7;
+            --primary-light: #e0f2fe;
             --success: #10b981;
             --success-light: #ecfdf5;
             --danger: #ef4444;
@@ -43,7 +43,7 @@
 
         .brand {
             display: flex; align-items: center; gap: 12px;
-            font-size: 1.35rem; font-weight: 800; color: var(--primary);
+            font-size: 1.25rem; font-weight: 800; color: var(--primary);
             padding: 0 12px 20px 12px; border-bottom: 1px solid var(--border);
         }
 
@@ -66,8 +66,7 @@
         .controls-group { display: flex; align-items: center; gap: 12px; }
 
         .filter-select, .date-input { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); font-weight: 500; outline: none; }
-        .btn-privacy { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; color: var(--text-muted); }
-
+        
         .view-section { display: none; }
         .view-section.active { display: flex; flex-direction: column; gap: 24px; }
 
@@ -99,8 +98,6 @@
         .tag-type { padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
         .tag-receita { background-color: var(--success-light); color: var(--success); }
         .tag-despesa { background-color: var(--danger-light); color: var(--danger); }
-        .tag-status-pago { background-color: var(--success-light); color: var(--success); font-size:0.75rem; padding: 2px 6px; border-radius:4px; font-weight:700;}
-        .tag-status-pendente { background-color: var(--warning-light); color: var(--warning); font-size:0.75rem; padding: 2px 6px; border-radius:4px; font-weight:700;}
 
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 16px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -109,34 +106,15 @@
 
         /* Botões */
         .btn-primary { background-color: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-primary:hover { background-color: #02699d; }
         .btn-filter { background: var(--bg-body); border: 1px solid var(--border); padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer; }
         .btn-filter.active { background: var(--primary); color: white; border-color: var(--primary); }
         .btn-danger-sm { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1rem; }
         .btn-outline { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
 
-        .progress-ok { background-color: var(--success); }
-        .progress-warning { background-color: var(--warning); }
-        .progress-danger { background-color: var(--danger); }
-        .status-ok { color: var(--success); font-weight: 700; }
-        .status-diff { color: var(--danger); font-weight: 700; }
-
-        .cat-clickable { color: var(--primary); cursor: pointer; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-        .cat-clickable:hover { color: #1d4ed8; }
-
         .alert-banner {
             background-color: var(--warning-light); border: 1px solid var(--warning); color: #92400e;
             padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-        }
-
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(15, 23, 42, 0.4); display: none; justify-content: center; align-items: center; z-index: 100;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-card {
-            background: var(--bg-card); border-radius: var(--radius); padding: 28px; width: 90%; max-width: 680px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; gap: 20px;
         }
     </style>
 </head>
@@ -146,26 +124,21 @@
     <aside>
         <div>
             <div class="brand">
-                <span>🧬</span>
-                <span>Lisossomos</span>
+                <span>🖨️</span>
+                <span>BSB Finance</span>
             </div>
             <ul class="nav-menu">
-                <li class="nav-item"><button class="active" onclick="switchView('dashboard', this)">📊 Dashboard</button></li>
-                <li class="nav-item"><button onclick="switchView('transactions', this)">💸 Lançamentos</button></li>
-                <li class="nav-item"><button onclick="switchView('fixedbills', this)">🔔 Contas Fixas</button></li>
-                <li class="nav-item"><button onclick="switchView('cards', this)">💳 Cartões de Crédito</button></li>
-                <li class="nav-item"><button onclick="switchView('projection', this)">📈 Projeção 6 Meses</button></li>
-                <li class="nav-item"><button onclick="switchView('transfers', this)">🔄 Transferências</button></li>
-                <li class="nav-item"><button onclick="switchView('reconciliation', this)">⚖️ Conciliação Bancária</button></li>
-                <li class="nav-item"><button onclick="switchView('goals', this)">🎯 Metas por Categoria</button></li>
-                <li class="nav-item"><button onclick="switchView('accounts', this)">🏦 Contas & Chaves Pix</button></li>
-                <li class="nav-item"><button onclick="switchView('vaults', this)">🐷 Caixinhas & Objetivos</button></li>
+                <li class="nav-item"><button class="active" onclick="switchView('dashboard', this)">📊 Dashboard Loja</button></li>
+                <li class="nav-item"><button onclick="switchView('transactions', this)">💸 Movimentações</button></li>
+                <li class="nav-item"><button onclick="switchView('reminders', this)">🔔 Contas Fixas & Lembretes</button></li>
+                <li class="nav-item"><button onclick="switchView('products', this)">📦 Controle de Produtos</button></li>
+                <li class="nav-item"><button onclick="switchView('categories', this)">🏷️ Categorias & Insumos</button></li>
                 <li class="nav-item"><button onclick="switchView('settings', this)">⚙️ Configurações & Código</button></li>
             </ul>
         </div>
 
         <div class="backup-section">
-            <button class="btn-outline" onclick="exportData()">📥 Exportar Backup (JSON)</button>
+            <button class="btn-outline" onclick="exportData()">📥 Exportar Backup</button>
             <button class="btn-outline" onclick="document.getElementById('importFile').click()">📤 Importar Backup</button>
             <input type="file" id="importFile" style="display:none" onchange="importData(event)">
         </div>
@@ -175,128 +148,100 @@
     <main>
         <div class="top-bar">
             <div class="page-title">
-                <h1 id="pageTitle">Visão Geral</h1>
-                <p id="pageSubtitle">Acompanhamento consolidado do orçamento (sem ficar liso!).</p>
+                <h1 id="pageTitle">Bsb tech e print</h1>
+                <p id="pageSubtitle">Controle financeiro de vendas, acrílico, MDF, sublimação e insumos.</p>
             </div>
             <div class="controls-group">
                 <select id="viewMode" class="filter-select" onchange="updateDashboard()">
                     <option value="month">Mensal</option>
-                    <option value="day">Diário</option>
                     <option value="year">Anual</option>
                 </select>
                 <input type="month" id="filterPeriod" class="date-input" onchange="updateDashboard()">
-                <button class="btn-privacy" onclick="togglePrivacy()">
-                    <span id="privacyIcon">👁️</span> <span id="privacyText">Ocultar</span>
-                </button>
             </div>
         </div>
 
-        <!-- BANNER DE ALERTAS DE CONTAS FIXAS -->
-        <div id="upcomingAlertBanner" class="alert-banner" style="display: none;">
+        <!-- BANNER DE LEMBRETES DE CONTAS FIXAS -->
+        <div id="reminderAlertBanner" class="alert-banner" style="display: none;">
             <span>🔔</span>
-            <span id="upcomingAlertText">Você tem contas fixas vencendo hoje ou nos próximos dias!</span>
+            <span id="reminderAlertText">Lembrete de contas fixas para este mês!</span>
         </div>
 
         <!-- TELA 1: DASHBOARD -->
         <section id="view-dashboard" class="view-section active">
             <div class="metrics-grid">
                 <div class="metric-card">
-                    <span class="title">Entradas (Receitas)</span>
+                    <span class="title">Faturamento (Vendas)</span>
                     <span class="amount inflows" id="totalInflows">R$ 0,00</span>
                 </div>
                 <div class="metric-card">
-                    <span class="title">Saídas (Despesas)</span>
+                    <span class="title">Custos & Despesas</span>
                     <span class="amount outflows" id="totalOutflows">R$ 0,00</span>
                 </div>
                 <div class="metric-card">
-                    <span class="title">Saldo Líquido</span>
+                    <span class="title">Lucro Líquido da Loja</span>
                     <span class="amount balance" id="totalBalance">R$ 0,00</span>
                 </div>
             </div>
 
-            <!-- PAINEL DE LEMBRETES DE CONTAS FIXAS NA DASHBOARD -->
+            <!-- PAINEL DE LEMBRETES NO DASHBOARD -->
             <div class="card-panel">
-                <h2>📌 Lembretes de Contas Fixas & Vencimentos</h2>
-                <div id="dashFixedBillsList" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
+                <h2>📌 Lembretes de Contas Fixas Cadastradas</h2>
+                <div id="dashRemindersList" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
             </div>
 
             <div class="dashboard-columns">
                 <div class="card-panel">
-                    <h2>Metas de Gastos por Categoria</h2>
-                    <div id="dashGoalsList" style="display: flex; flex-direction: column; gap: 14px;"></div>
+                    <h2>Resumo por Categoria</h2>
+                    <div id="dashCategoriesList" style="display: flex; flex-direction: column; gap: 14px;"></div>
                 </div>
                 <div class="card-panel">
-                    <h2>Distribuição de Despesas</h2>
-                    <canvas id="categoryChart" style="max-height: 280px;"></canvas>
+                    <h2>Faturamento x Custos</h2>
+                    <canvas id="storeChart" style="max-height: 280px;"></canvas>
                 </div>
             </div>
         </section>
 
-        <!-- TELA 2: LANÇAMENTOS -->
+        <!-- TELA 2: MOVIMENTAÇÕES -->
         <section id="view-transactions" class="view-section">
             <div class="card-panel">
-                <h2>Novo Lançamento</h2>
+                <h2>Nova Movimentação (Venda ou Custo)</h2>
                 <form id="transactionForm" onsubmit="addTransaction(event)">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Descrição</label>
-                            <input type="text" id="txDesc" placeholder="Ex: Mercado, Salário, Internet..." required>
+                            <label>Descrição do Pedido / Insumo</label>
+                            <input type="text" id="txDesc" placeholder="Ex: Placa Acrílico LED, Canecas Sublimadas..." required>
                         </div>
                         <div class="form-group">
-                            <label>Valor (R$)</label>
+                            <label>Valor Total (R$)</label>
                             <input type="number" id="txAmount" step="0.01" min="0.01" placeholder="0,00" required>
                         </div>
                         <div class="form-group">
                             <label>Tipo</label>
                             <select id="txType" required>
-                                <option value="despesa">Despesa (-)</option>
-                                <option value="receita">Receita (+)</option>
+                                <option value="receita">Entrada / Venda (+)</option>
+                                <option value="despesa">Saída / Custo (-)</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Frequência / Parcelas</label>
-                            <select id="txRecurrence" onchange="toggleParcelasInput(this.value)">
-                                <option value="unico">Lançamento Único</option>
-                                <option value="fixo">Fixo Mensal (Recorrente)</option>
-                                <option value="parcelado">Compra Parcelada (x)</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="parcelasGroup" style="display: none;">
-                            <label>Qtd. de Parcelas</label>
-                            <input type="number" id="txInstallments" min="2" max="60" value="2">
-                        </div>
-                        <div class="form-group">
-                            <label>Conta / Cartão</label>
-                            <select id="txAccountSelect" required></select>
                         </div>
                         <div class="form-group">
                             <label>Categoria</label>
                             <select id="txCategory" required></select>
                         </div>
                         <div class="form-group">
-                            <label>Data Vencimento/Realização</label>
+                            <label>Data</label>
                             <input type="date" id="txDate" required>
                         </div>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select id="txStatus">
-                                <option value="pago">Pago / Recebido</option>
-                                <option value="pendente">Pendente / A Vencer</option>
-                            </select>
-                        </div>
                     </div>
-                    <button type="submit" class="btn-primary">Salvar Lançamento</button>
+                    <button type="submit" class="btn-primary">Salvar Movimentação</button>
                 </form>
             </div>
 
             <div class="card-panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
-                    <h2>Histórico Geral de Lançamentos</h2>
+                    <h2>Histórico de Movimentações da Loja</h2>
                     <div style="display: flex; gap: 8px;">
                         <button type="button" class="btn-filter active" onclick="setTxFilter('todos', this)">Todos</button>
-                        <button type="button" class="btn-filter" onclick="setTxFilter('receita', this)">🟢 Receitas</button>
-                        <button type="button" class="btn-filter" onclick="setTxFilter('despesa', this)">🔴 Despesas</button>
-                        <button type="button" class="btn-filter" onclick="setTxFilter('pendente', this)">⚠️ Pendentes</button>
+                        <button type="button" class="btn-filter" onclick="setTxFilter('receita', this)">🟢 Vendas</button>
+                        <button type="button" class="btn-filter" onclick="setTxFilter('despesa', this)">🔴 Custos</button>
                     </div>
                 </div>
                 <div class="table-container">
@@ -305,9 +250,8 @@
                             <tr>
                                 <th>Data</th>
                                 <th>Descrição</th>
-                                <th>Conta / Cartão</th>
                                 <th>Categoria</th>
-                                <th>Status</th>
+                                <th>Tipo</th>
                                 <th>Valor</th>
                                 <th>Ações</th>
                             </tr>
@@ -319,15 +263,14 @@
         </section>
 
         <!-- TELA 3: CONTAS FIXAS & LEMBRETES -->
-        <section id="view-fixedbills" class="view-section">
+        <section id="view-reminders" class="view-section">
             <div class="card-panel">
-                <h2>Cadastrar Conta Fixa / Recorrente</h2>
-                <form onsubmit="addFixedBill(event)" style="margin-bottom: 16px;">
+                <h2>Cadastrar Conta Fixa / Lembrete Recorrente</h2>
+                <form onsubmit="addReminder(event)" style="margin-bottom: 16px;">
                     <div class="form-grid">
-                        <input type="text" id="fbDesc" placeholder="Descrição (ex: Aluguel, Internet, Netflix)" required>
-                        <input type="number" id="fbAmount" step="0.01" placeholder="Valor Estimado (R$)" required>
-                        <input type="number" id="fbDay" min="1" max="31" placeholder="Dia do Vencimento (ex: 10)" required>
-                        <select id="fbCategory" required></select>
+                        <input type="text" id="remDesc" placeholder="Descrição (ex: Internet da Loja, Aluguel)" required>
+                        <input type="number" id="remAmount" step="0.01" placeholder="Valor Estimado (R$)" required>
+                        <input type="number" id="remDay" min="1" max="31" placeholder="Dia do Vencimento (ex: 1)" required>
                     </div>
                     <button type="submit" class="btn-primary">Salvar Conta Fixa</button>
                 </form>
@@ -335,225 +278,58 @@
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Dia de Vencimento</th>
-                                <th>Descrição da Conta</th>
-                                <th>Categoria</th>
-                                <th>Valor Estimado</th>
-                                <th>Ação</th>
-                            </tr>
+                            <tr><th>Dia de Vencimento</th><th>Descrição da Conta</th><th>Valor Estimado</th><th>Ação</th></tr>
                         </thead>
-                        <tbody id="fixedBillsTable"></tbody>
+                        <tbody id="remindersTable"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- TELA 4: GESTÃO DE CARTÕES DE CRÉDITO -->
-        <section id="view-cards" class="view-section">
+        <!-- TELA 4: PRODUTOS -->
+        <section id="view-products" class="view-section">
             <div class="card-panel">
-                <h2>Cadastrar Cartão de Crédito</h2>
-                <form onsubmit="addCreditCard(event)" style="margin-bottom: 16px;">
+                <h2>Cadastrar Produto / Serviço Personalizado</h2>
+                <form onsubmit="addProduct(event)" style="margin-bottom: 16px;">
                     <div class="form-grid">
-                        <input type="text" id="cardName" placeholder="Nome do Cartão (ex: C6 Black, Inter)" required>
-                        <input type="text" id="cardOwner" placeholder="Titular" required>
-                        <input type="number" id="cardLimit" step="100" placeholder="Limite Total (R$)" required>
-                        <input type="number" id="cardClosingDay" min="1" max="31" placeholder="Dia Fechamento Fatura" required>
-                        <input type="number" id="cardDueDay" min="1" max="31" placeholder="Dia Vencimento Fatura" required>
+                        <input type="text" id="prodName" placeholder="Nome (ex: Chaveiro MDF, Copo Personalizado)" required>
+                        <input type="number" id="prodCost" step="0.01" placeholder="Custo de Produção (R$)" required>
+                        <input type="number" id="prodPrice" step="0.01" placeholder="Preço de Venda Sugerido (R$)" required>
+                        <input type="text" id="prodCategory" placeholder="Categoria (ex: Sublimação, Acrílico)" required>
                     </div>
-                    <button type="submit" class="btn-primary">Salvar Cartão</button>
+                    <button type="submit" class="btn-primary">Salvar Produto</button>
                 </form>
 
-                <div id="creditCardsGrid" class="metrics-grid"></div>
-            </div>
-        </section>
-
-        <!-- TELA 5: PROJEÇÃO DE FLUXO DE CAIXA (6 MESES) -->
-        <section id="view-projection" class="view-section">
-            <div class="card-panel">
-                <h2>Projeção do Fluxo de Caixa (Próximos 6 Meses)</h2>
-                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
-                    Previsão de receitas e despesas levando em conta os custos fixos recorrentes e parcelamentos ativos.
-                </p>
-                <canvas id="projectionChart" style="max-height: 350px;"></canvas>
-            </div>
-        </section>
-
-        <!-- TELA 6: TRANSFERÊNCIAS -->
-        <section id="view-transfers" class="view-section">
-            <div class="card-panel">
-                <h2>Nova Transferência Entre Contas</h2>
-                <form onsubmit="addTransfer(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Conta de Origem (Sai)</label>
-                            <select id="tfFrom" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Conta de Destino (Entra)</label>
-                            <select id="tfTo" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Valor (R$)</label>
-                            <input type="number" id="tfAmount" step="0.01" min="0.01" placeholder="0,00" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Data</label>
-                            <input type="date" id="tfDate" required>
-                        </div>
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label>Observação/Motivo</label>
-                            <input type="text" id="tfDesc" placeholder="Ex: Envio para caixinha, ajuste de saldo...">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-primary">Realizar Transferência</button>
-                </form>
-            </div>
-
-            <div class="card-panel">
-                <h2>Histórico de Transferências Inter-contas</h2>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Origem</th>
-                                <th>Destino</th>
-                                <th>Descrição</th>
-                                <th>Valor</th>
-                                <th>Ação</th>
-                            </tr>
+                            <tr><th>Produto</th><th>Categoria</th><th>Custo Estimado</th><th>Preço Venda</th><th>Margem Lucro</th><th>Ação</th></tr>
                         </thead>
-                        <tbody id="transfersTable"></tbody>
+                        <tbody id="productsTable"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- TELA 7: CONCILIAÇÃO BANCÁRIA -->
-        <section id="view-reconciliation" class="view-section">
+        <!-- TELA 5: CATEGORIAS -->
+        <section id="view-categories" class="view-section">
             <div class="card-panel">
-                <h2>Conciliação e Saldo Calculado de Cada Conta</h2>
-                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px;">
-                    Confira o saldo real do extrato do seu banco com o saldo calculado pelas movimentações. Clique em <strong>"🔍 Ver Extrato"</strong> para ver todas as datas.
-                </p>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Conta / Banco</th>
-                                <th>Data Inicial</th>
-                                <th>Saldo Inicial (R$)</th>
-                                <th>Entradas / Saídas</th>
-                                <th>Saldo Calculado</th>
-                                <th>Saldo Real no Extrato (R$)</th>
-                                <th>Status</th>
-                                <th>Extrato & Datas</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reconciliationTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TELA 8: METAS POR CATEGORIA -->
-        <section id="view-goals" class="view-section">
-            <div class="card-panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
-                    <h2>Gerenciar Metas de Gastos</h2>
-                    <div style="display: flex; gap: 8px;">
-                        <button type="button" class="btn-filter active" id="btnGoalMonth" onclick="setGoalViewMode('month', this)">Visão Mensal</button>
-                        <button type="button" class="btn-filter" id="btnGoalYear" onclick="setGoalViewMode('year', this)">Visão Anual Teto</button>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr id="goalsHeader">
-                                <th>Categoria</th>
-                                <th>Meta Mês Atual (R$)</th>
-                                <th>Gasto Realizado</th>
-                                <th>Status</th>
-                                <th>Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody id="goalsTable"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card-panel">
-                <h2>Adicionar Nova Categoria</h2>
-                <form onsubmit="addCategory(event)" style="display: flex; gap: 12px; max-width: 450px;">
-                    <input type="text" id="newCatName" placeholder="Nome da Categoria" style="flex:1; padding: 10px; border: 1px solid var(--border); border-radius:8px;" required>
+                <h2>Gerenciar Categorias da Loja</h2>
+                <form onsubmit="addCategory(event)" style="display: flex; gap: 12px; max-width: 450px; margin-bottom: 20px;">
+                    <input type="text" id="newCatName" placeholder="Nova Categoria (ex: Taxa Maquininha, Entregas)" style="flex:1; padding: 10px; border: 1px solid var(--border); border-radius:8px;" required>
                     <button type="submit" class="btn-primary">Criar Categoria</button>
                 </form>
-            </div>
-        </section>
 
-        <!-- TELA 9: CONTAS & CHAVES PIX -->
-        <section id="view-accounts" class="view-section">
-            <div class="card-panel">
-                <h2>Cadastrar Contas Bancárias (com Saldo Inicial)</h2>
-                <form onsubmit="addBankAccount(event)" style="margin-bottom: 16px;">
-                    <div class="form-grid">
-                        <input type="text" id="accBank" placeholder="Nome do Banco / Conta" required>
-                        <input type="text" id="accOwner" placeholder="Titular" required>
-                        <input type="number" id="accInitialBalance" step="0.01" placeholder="Saldo Inicial (R$)" required>
-                        <input type="date" id="accInitialDate" required>
-                        <input type="text" id="accPurpose" placeholder="Finalidade (ex: Gastos da Casa)" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Salvar Conta</button>
-                </form>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr><th>Banco/Conta</th><th>Titular</th><th>Data Inicial</th><th>Saldo Inicial</th><th>Finalidade</th><th>Ação</th></tr>
-                        </thead>
-                        <tbody id="accountsTable"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card-panel">
-                <h2>Chaves Pix Cadastradas</h2>
-                <form onsubmit="addPix(event)" style="margin-bottom: 16px;">
-                    <div class="form-grid">
-                        <input type="text" id="pixOwner" placeholder="Titular" required>
-                        <input type="text" id="pixBank" placeholder="Banco" required>
-                        <input type="text" id="pixKey" placeholder="Chave Pix" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Adicionar Pix</button>
-                </form>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Titular</th><th>Banco</th><th>Chave</th><th>Ação</th></tr></thead>
-                        <tbody id="pixTable"></tbody>
+                        <thead><tr><th>Nome da Categoria</th><th>Ação</th></tr></thead>
+                        <tbody id="categoriesTable"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- TELA 10: CAIXINHAS & SIMULADOR DE TEMPO -->
-        <section id="view-vaults" class="view-section">
-            <div class="card-panel">
-                <h2>Suas Caixinhas & Objetivos</h2>
-                <form onsubmit="addVault(event)" style="margin-bottom: 20px;">
-                    <div class="form-grid">
-                        <input type="text" id="vaultName" placeholder="Nome da Caixinha (ex: Viagem, Emergência)" required>
-                        <input type="number" id="vaultCurrent" step="0.01" placeholder="Valor Guardado Atual (R$)" required>
-                        <input type="number" id="vaultGoal" step="0.01" placeholder="Meta Final (R$)" required>
-                        <input type="number" id="vaultMonthlyDeposit" step="10" placeholder="Aporte Mensal Previsto (R$)" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Criar Caixinha</button>
-                </form>
-                <div id="vaultsGrid" class="metrics-grid"></div>
-            </div>
-        </section>
-
-        <!-- TELA 11: CONFIGURAÇÕES & CÓDIGO FONTE -->
+        <!-- TELA 6: CONFIGURAÇÕES & CÓDIGO FONTE -->
         <section id="view-settings" class="view-section">
             <div class="card-panel">
                 <h2>⚙️ Gestão de Dados & Backup</h2>
@@ -573,178 +349,49 @@
                     Pode copiar todo o código atual do site diretamente daqui sempre que precisar de alterar algo no GitHub, sem precisar de procurar conversas antigas.
                 </p>
                 <button class="btn-primary" onclick="copySourceCode()" style="margin-bottom: 12px;">📋 Copiar Código Fonte Completo</button>
-                <textarea id="sourceCodeBox" readonly style="width: 100%; height: 200px; padding: 12px; font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-body); outline: none;"></textarea>
+                <textarea id="sourceCodeBox" readonly style="width: 100%; height: 200px; padding: 12px; font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-body); outline: none; cursor: text;" onclick="this.select()"></textarea>
             </div>
         </section>
     </main>
 
-    <!-- MODAL 1: DETALHAMENTO DE CATEGORIA (RAIO-X) -->
-    <div id="catModalOverlay" class="modal-overlay">
-        <div class="modal-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2 id="modalCatTitle" style="font-size: 1.3rem; color: var(--primary);">Categoria</h2>
-                <button onclick="closeModal('catModalOverlay')" class="btn-outline" style="padding: 4px 10px;">✕ Fechar</button>
-            </div>
-            
-            <div class="metrics-grid" style="grid-template-columns: 1fr 1fr;">
-                <div class="metric-card">
-                    <span class="title">Gasto Mês Atual</span>
-                    <span id="modalMonthSpent" class="amount outflows">R$ 0,00</span>
-                    <span id="modalMonthGoalText" style="font-size: 0.8rem; color: var(--text-muted);">Meta: R$ 0,00</span>
-                </div>
-                <div class="metric-card">
-                    <span class="title">Gasto Acumulado no Ano</span>
-                    <span id="modalYearSpent" class="amount outflows">R$ 0,00</span>
-                    <span id="modalYearGoalText" style="font-size: 0.8rem; color: var(--text-muted);">Teto Anual: R$ 0,00</span>
-                </div>
-            </div>
-
-            <div id="modalAdviceBox" style="background: var(--primary-light); border: 1px solid #bfdbfe; padding: 12px; border-radius: 8px; font-size: 0.85rem; color: #1e40af;"></div>
-
-            <div>
-                <h3 style="font-size: 0.95rem; margin-bottom: 10px; color: var(--text-muted);">Histórico Mês a Mês do Ano</h3>
-                <div class="table-container" style="max-height: 200px; overflow-y: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Mês</th>
-                                <th>Gasto Realizado</th>
-                                <th>Meta Mês</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modalHistoryTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL 2: EXTRATO COMPLETO COM DATAS (CONCILIAÇÃO) -->
-    <div id="accStatementModal" class="modal-overlay">
-        <div class="modal-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2 id="modalAccTitle" style="font-size: 1.3rem; color: var(--primary);">Extrato da Conta</h2>
-                <button onclick="closeModal('accStatementModal')" class="btn-outline" style="padding: 4px 10px;">✕ Fechar</button>
-            </div>
-            
-            <p style="font-size: 0.88rem; color: var(--text-muted);">
-                Abaixo estão listadas todas as movimentações e transferências registradas para esta conta com as respetivas datas.
-            </p>
-
-            <div class="table-container" style="max-height: 300px; overflow-y: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Descrição / Origem</th>
-                            <th>Categoria</th>
-                            <th>Tipo</th>
-                            <th>Valor</th>
-                        </tr>
-                    </thead>
-                    <tbody id="modalAccountStatementTable"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const DEFAULT_CATEGORIES = ["Mercado", "Moradia", "Lazer", "Transporte", "Saúde", "Reserva/Investimentos"];
-        
-        function getMergedArrayFromLocalStorage(possibleKeys) {
-            let combined = [];
-            let seenIds = new Set();
+        const DEFAULT_CATEGORIES = [
+            "Vendas - Acrílico/Laser", 
+            "Vendas - MDF", 
+            "Vendas - Sublimação (Camisetas/Canecas)", 
+            "Vendas - Chaveiros & Displays",
+            "Insumos & Matéria-Prima", 
+            "Taxas de Maquininha / Pix", 
+            "Embalagens & Envio", 
+            "Manutenção de Equipamentos"
+        ];
 
-            possibleKeys.forEach(key => {
-                const item = localStorage.getItem(key);
-                if (item) {
-                    try {
-                        const parsed = JSON.parse(item);
-                        if (Array.isArray(parsed)) {
-                            parsed.forEach(obj => {
-                                const uniqueKey = obj.id || `${obj.date}_${obj.desc}_${obj.amount}`;
-                                if (!seenIds.has(uniqueKey)) {
-                                    seenIds.add(uniqueKey);
-                                    combined.push(obj);
-                                }
-                            });
-                        }
-                    } catch(e) {}
-                }
-            });
-            return combined;
-        }
-
-        function getMergedObjectFromLocalStorage(possibleKeys) {
-            let combinedObj = {};
-            possibleKeys.forEach(key => {
-                const item = localStorage.getItem(key);
-                if (item) {
-                    try {
-                        const parsed = JSON.parse(item);
-                        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-                            combinedObj = { ...combinedObj, ...parsed };
-                        }
-                    } catch(e) {}
-                }
-            });
-            return combinedObj;
-        }
-
-        const recoveredTxs = getMergedArrayFromLocalStorage(['fin_txs', 'transactions']);
-        const recoveredTransfers = getMergedArrayFromLocalStorage(['fin_transfers', 'transfers']);
-        const recoveredCats = getMergedArrayFromLocalStorage(['fin_cats', 'categories']);
-        const recoveredAccs = getMergedArrayFromLocalStorage(['fin_accs', 'accountsList', 'accounts']);
-        const recoveredCards = getMergedArrayFromLocalStorage(['fin_cards', 'creditCards']);
-        const recoveredPix = getMergedArrayFromLocalStorage(['fin_pix', 'pixList']);
-        const recoveredVaults = getMergedArrayFromLocalStorage(['fin_vaults', 'vaultsList']);
-        const recoveredFixedBills = getMergedArrayFromLocalStorage(['fin_fixed_bills', 'fixedBills']);
-        const recoveredRec = getMergedObjectFromLocalStorage(['fin_rec', 'bankReconciled']);
-        const recoveredGoals = getMergedObjectFromLocalStorage(['fin_goals', 'goals']);
-        const recoveredAnnualGoals = getMergedObjectFromLocalStorage(['fin_annual_goals', 'annualGoals']);
-
-        let state = {
-            transactions: recoveredTxs.length > 0 ? recoveredTxs : [],
-            transfers: recoveredTransfers.length > 0 ? recoveredTransfers : [],
-            categories: recoveredCats.length > 0 ? recoveredCats : DEFAULT_CATEGORIES,
-            fixedBills: recoveredFixedBills.length > 0 ? recoveredFixedBills : [
-                { id: 1, desc: "Internet Residencial", amount: 100.00, day: 10, category: "Moradia" }
+        let storeState = {
+            transactions: JSON.parse(localStorage.getItem('bsb_txs')) || [],
+            categories: JSON.parse(localStorage.getItem('bsb_cats')) || DEFAULT_CATEGORIES,
+            products: JSON.parse(localStorage.getItem('bsb_prods')) || [
+                { id: 1, name: "Caneca Sublimada Personalizada", cost: 12.00, price: 35.00, category: "Sublimação" },
+                { id: 2, name: "Chaveiro Acrílico Laser", cost: 3.00, price: 15.00, category: "Acrílico" }
             ],
-            goals: recoveredGoals,
-            annualGoals: recoveredAnnualGoals,
-            pixList: recoveredPix,
-            accountsList: recoveredAccs.length > 0 ? recoveredAccs : [
-                { id: 1, bank: "C6 (ALÉXIA)", owner: "Aléxia", initialBalance: 20000, initialDate: "2026-10-21", purpose: "Principal" },
-                { id: 2, bank: "INTER", owner: "Casal", initialBalance: 500, initialDate: "2026-10-21", purpose: "Geral" }
-            ],
-            creditCards: recoveredCards.length > 0 ? recoveredCards : [
-                { id: 101, name: "C6 Black", owner: "Aléxia", limit: 15000, closingDay: 15, dueDay: 22 }
-            ],
-            bankReconciled: recoveredRec,
-            vaultsList: recoveredVaults,
-            hideValues: false
+            reminders: JSON.parse(localStorage.getItem('bsb_rems')) || [
+                { id: 1, desc: "Internet da Loja", amount: 100.00, day: 1 }
+            ]
         };
 
-        let currentTxTypeFilter = 'todos';
-        let currentGoalTableMode = 'month';
+        let currentTxFilter = 'todos';
         let chartInstance = null;
-        let projectionChartInstance = null;
 
         document.addEventListener("DOMContentLoaded", () => {
             const now = new Date();
             document.getElementById('filterPeriod').value = now.toISOString().slice(0, 7);
-            const todayStr = now.toISOString().slice(0, 10);
-            document.getElementById('txDate').value = todayStr;
-            document.getElementById('tfDate').value = todayStr;
-            document.getElementById('accInitialDate').value = todayStr;
+            document.getElementById('txDate').value = now.toISOString().slice(0, 10);
 
-            populateAccountSelects();
             populateCategoriesSelects();
-            checkUpcomingAlerts();
             updateDashboard();
             renderTransactionsTable();
-            renderFixedBillsTable();
+            renderRemindersTable();
+            renderProductsTable();
+            renderCategoriesTable();
             loadSourceCodeIntoView();
         });
 
@@ -757,540 +404,186 @@
 
             if (viewName === 'dashboard') updateDashboard();
             if (viewName === 'transactions') renderTransactionsTable();
-            if (viewName === 'fixedbills') renderFixedBillsTable();
-            if (viewName === 'cards') renderCreditCards();
-            if (viewName === 'projection') renderProjectionChart();
-            if (viewName === 'transfers') renderTransfersTable();
-            if (viewName === 'reconciliation') renderReconciliationTable();
-            if (viewName === 'goals') renderGoalsTable();
-            if (viewName === 'accounts') renderAccountsAndPix();
-            if (viewName === 'vaults') renderVaults();
+            if (viewName === 'reminders') renderRemindersTable();
+            if (viewName === 'products') renderProductsTable();
+            if (viewName === 'categories') renderCategoriesTable();
             if (viewName === 'settings') loadSourceCodeIntoView();
         }
 
-        function togglePrivacy() {
-            state.hideValues = !state.hideValues;
-            document.getElementById('privacyIcon').innerText = state.hideValues ? '🙈' : '👁️';
-            document.getElementById('privacyText').innerText = state.hideValues ? 'Mostrar' : 'Ocultar';
-            updateDashboard();
-            renderTransactionsTable();
-            renderFixedBillsTable();
-            renderTransfersTable();
-            renderReconciliationTable();
-            renderVaults();
-            renderGoalsTable();
-            renderCreditCards();
-        }
-
         function formatCurrency(val) {
-            if (state.hideValues) return 'R$ ****';
             return (val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        function saveState() {
-            localStorage.setItem('fin_txs', JSON.stringify(state.transactions));
-            localStorage.setItem('transactions', JSON.stringify(state.transactions));
-            localStorage.setItem('fin_transfers', JSON.stringify(state.transfers));
-            localStorage.setItem('fin_cats', JSON.stringify(state.categories));
-            localStorage.setItem('fin_fixed_bills', JSON.stringify(state.fixedBills));
-            localStorage.setItem('fin_goals', JSON.stringify(state.goals));
-            localStorage.setItem('fin_annual_goals', JSON.stringify(state.annualGoals));
-            localStorage.setItem('fin_pix', JSON.stringify(state.pixList));
-            localStorage.setItem('fin_accs', JSON.stringify(state.accountsList));
-            localStorage.setItem('fin_cards', JSON.stringify(state.creditCards));
-            localStorage.setItem('fin_rec', JSON.stringify(state.bankReconciled));
-            localStorage.setItem('fin_vaults', JSON.stringify(state.vaultsList));
-        }
-
-        function populateAccountSelects() {
-            const txAcc = document.getElementById('txAccountSelect');
-            const tfFrom = document.getElementById('tfFrom');
-            const tfTo = document.getElementById('tfTo');
-
-            [txAcc, tfFrom, tfTo].forEach(select => {
-                if (!select) return;
-                select.innerHTML = '';
-                
-                state.accountsList.forEach(a => {
-                    select.insertAdjacentHTML('beforeend', `<option value="${a.bank}">${a.bank} (${a.owner})</option>`);
-                });
-
-                if (select === txAcc) {
-                    state.creditCards.forEach(c => {
-                        select.insertAdjacentHTML('beforeend', `<option value="Cartão: ${c.name}">💳 Cartão: ${c.name} (${c.owner})</option>`);
-                    });
-                }
-            });
+        function saveStoreState() {
+            localStorage.setItem('bsb_txs', JSON.stringify(storeState.transactions));
+            localStorage.setItem('bsb_cats', JSON.stringify(storeState.categories));
+            localStorage.setItem('bsb_prods', JSON.stringify(storeState.products));
+            localStorage.setItem('bsb_rems', JSON.stringify(storeState.reminders));
         }
 
         function populateCategoriesSelects() {
             const sel = document.getElementById('txCategory');
-            const fbSel = document.getElementById('fbCategory');
-            [sel, fbSel].forEach(select => {
-                if (!select) return;
-                select.innerHTML = '';
-                state.categories.forEach(c => select.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`));
-            });
-        }
-
-        function checkUpcomingAlerts() {
-            const today = new Date();
-            const currentDay = today.getDate();
-
-            let hasUpcoming = false;
-            state.fixedBills.forEach(fb => {
-                const diffDays = fb.day - currentDay;
-                if (diffDays >= 0 && diffDays <= 5) {
-                    hasUpcoming = true;
-                }
-            });
-
-            const banner = document.getElementById('upcomingAlertBanner');
-            if (hasUpcoming) {
-                document.getElementById('upcomingAlertText').innerText = "Atenção: Você tem contas fixas vencendo hoje ou nos próximos dias!";
-                banner.style.display = 'flex';
-            } else {
-                banner.style.display = 'none';
-            }
-        }
-
-        function toggleParcelasInput(val) {
-            document.getElementById('parcelasGroup').style.display = (val === 'parcelado') ? 'flex' : 'none';
-        }
-
-        // --- LANÇAMENTOS ---
-        function setTxFilter(type, btn) {
-            currentTxTypeFilter = type;
-            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderTransactionsTable();
+            if (!sel) return;
+            sel.innerHTML = '';
+            storeState.categories.forEach(c => sel.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`));
         }
 
         function addTransaction(e) {
             e.preventDefault();
-            const desc = document.getElementById('txDesc').value;
-            const amount = parseFloat(document.getElementById('txAmount').value);
-            const type = document.getElementById('txType').value;
-            const recurrence = document.getElementById('txRecurrence').value;
-            const account = document.getElementById('txAccountSelect').value;
-            const category = document.getElementById('txCategory').value;
-            const startDate = document.getElementById('txDate').value;
-            const status = document.getElementById('txStatus').value;
+            storeState.transactions.push({
+                id: Date.now(),
+                desc: document.getElementById('txDesc').value,
+                amount: parseFloat(document.getElementById('txAmount').value),
+                type: document.getElementById('txType').value,
+                category: document.getElementById('txCategory').value,
+                date: document.getElementById('txDate').value
+            });
 
-            if (recurrence === 'parcelado') {
-                const installments = parseInt(document.getElementById('txInstallments').value) || 2;
-                const parcelAmount = amount / installments;
-                let dateObj = new Date(startDate + 'T00:00:00');
-
-                for (let i = 1; i <= installments; i++) {
-                    const iterDate = new Date(dateObj);
-                    iterDate.setMonth(dateObj.getMonth() + (i - 1));
-
-                    state.transactions.push({
-                        id: Date.now() + i,
-                        desc: `${desc} (${i}/${installments})`,
-                        amount: parcelAmount,
-                        type, account, category,
-                        date: iterDate.toISOString().slice(0, 10),
-                        status: i === 1 ? status : 'pendente',
-                        recurrence: 'parcelado'
-                    });
-                }
-            } else {
-                state.transactions.push({
-                    id: Date.now(),
-                    desc, amount, type, account, category,
-                    date: startDate,
-                    status,
-                    recurrence
-                });
-            }
-
-            saveState();
+            saveStoreState();
             document.getElementById('transactionForm').reset();
             document.getElementById('txDate').value = new Date().toISOString().slice(0, 10);
-            
-            checkUpcomingAlerts();
             renderTransactionsTable();
             updateDashboard();
         }
 
-        function toggleStatusTx(id) {
-            const tx = state.transactions.find(t => t.id === id);
-            if (tx) {
-                tx.status = tx.status === 'pago' ? 'pendente' : 'pago';
-                saveState();
-                checkUpcomingAlerts();
-                renderTransactionsTable();
-                updateDashboard();
-            }
+        function setTxFilter(type, btn) {
+            currentTxFilter = type;
+            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderTransactionsTable();
         }
 
         function renderTransactionsTable() {
             const tbody = document.getElementById('transactionsTable');
             tbody.innerHTML = '';
             
-            let filtered = [...state.transactions];
-
-            if (currentTxTypeFilter === 'receita') filtered = filtered.filter(t => t.type === 'receita');
-            if (currentTxTypeFilter === 'despesa') filtered = filtered.filter(t => t.type === 'despesa');
-            if (currentTxTypeFilter === 'pendente') filtered = filtered.filter(t => t.status === 'pendente');
+            let filtered = [...storeState.transactions];
+            if (currentTxFilter === 'receita') filtered = filtered.filter(t => t.type === 'receita');
+            if (currentTxFilter === 'despesa') filtered = filtered.filter(t => t.type === 'despesa');
 
             filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-muted);">Nenhum lançamento encontrado. Cadastre uma despesa ou receita acima!</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Nenhum registro encontrado.</td></tr>`;
                 return;
             }
 
             filtered.forEach(tx => {
-                const isPaid = tx.status === 'pago' || !tx.status;
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr>
                         <td>${tx.date ? tx.date.split('-').reverse().join('/') : '-'}</td>
-                        <td><strong>${tx.desc}</strong> ${tx.recurrence === 'fixo' ? '<small style="color:var(--primary);">(Fixo)</small>' : ''}</td>
-                        <td>${tx.account || 'Geral'}</td>
-                        <td><span class="cat-clickable" onclick="openCatModal('${tx.category}')">${tx.category}</span></td>
-                        <td>
-                            <button onclick="toggleStatusTx(${tx.id})" class="${isPaid ? 'tag-status-pago' : 'tag-status-pendente'}" style="border:none; cursor:pointer;">
-                                ${isPaid ? '✔ Pago/Ok' : '⏳ Pendente'}
-                            </button>
-                        </td>
+                        <td><strong>${tx.desc}</strong></td>
+                        <td>${tx.category}</td>
+                        <td><span class="tag-type tag-${tx.type}">${tx.type === 'receita' ? 'Venda (+)' : 'Custo (-)'}</span></td>
                         <td style="font-weight:700; color: ${tx.type === 'receita' ? 'var(--success)' : 'var(--danger)'}">
                             ${tx.type === 'receita' ? '+' : '-'} ${formatCurrency(tx.amount)}
                         </td>
-                        <td><button class="btn-danger-sm" onclick="state.transactions=state.transactions.filter(x=>x.id!=${tx.id});saveState();checkUpcomingAlerts();renderTransactionsTable();updateDashboard();">🗑️</button></td>
+                        <td><button class="btn-danger-sm" onclick="storeState.transactions=storeState.transactions.filter(x=>x.id!=${tx.id});saveStoreState();renderTransactionsTable();updateDashboard();">🗑️</button></td>
                     </tr>
                 `);
             });
         }
 
-        // --- CONTAS FIXAS & LEMBRETES ---
-        function addFixedBill(e) {
+        function addReminder(e) {
             e.preventDefault();
-            state.fixedBills.push({
+            storeState.reminders.push({
                 id: Date.now(),
-                desc: document.getElementById('fbDesc').value,
-                amount: parseFloat(document.getElementById('fbAmount').value),
-                day: parseInt(document.getElementById('fbDay').value),
-                category: document.getElementById('fbCategory').value
+                desc: document.getElementById('remDesc').value,
+                amount: parseFloat(document.getElementById('remAmount').value),
+                day: parseInt(document.getElementById('remDay').value)
             });
-            saveState();
-            renderFixedBillsTable();
+            saveStoreState();
+            renderRemindersTable();
             updateDashboard();
-            checkUpcomingAlerts();
             e.target.reset();
         }
 
-        function renderFixedBillsTable() {
-            const tbody = document.getElementById('fixedBillsTable');
+        function renderRemindersTable() {
+            const tbody = document.getElementById('remindersTable');
             if (!tbody) return;
             tbody.innerHTML = '';
             
-            state.fixedBills.sort((a,b) => a.day - b.day).forEach(fb => {
+            storeState.reminders.sort((a,b) => a.day - b.day).forEach(r => {
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr>
-                        <td>Dia <strong>${fb.day}</strong> de cada mês</td>
-                        <td><strong>${fb.desc}</strong></td>
-                        <td>${fb.category}</td>
-                        <td>${formatCurrency(fb.amount)}</td>
-                        <td><button class="btn-danger-sm" onclick="state.fixedBills=state.fixedBills.filter(x=>x.id!=${fb.id});saveState();renderFixedBillsTable();updateDashboard();checkUpcomingAlerts();">🗑️</button></td>
+                        <td>Dia <strong>${r.day}</strong> de cada mês</td>
+                        <td><strong>${r.desc}</strong></td>
+                        <td>${formatCurrency(r.amount)}</td>
+                        <td><button class="btn-danger-sm" onclick="storeState.reminders=storeState.reminders.filter(x=>x.id!=${r.id});saveStoreState();renderRemindersTable();updateDashboard();">🗑️</button></td>
                     </tr>
                 `);
             });
         }
 
-        function renderDashFixedBills() {
-            const container = document.getElementById('dashFixedBillsList');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (state.fixedBills.length === 0) {
-                container.innerHTML = `<span style="color:var(--text-muted); font-size:0.9rem;">Nenhuma conta fixa cadastrada. Vá na aba "Contas Fixas" para adicionar.</span>`;
-                return;
-            }
-
-            const today = new Date();
-            const currentDay = today.getDate();
-
-            state.fixedBills.sort((a,b) => a.day - b.day).forEach(fb => {
-                const diffDays = fb.day - currentDay;
-                let statusText = `Vence dia ${fb.day}`;
-                let statusColor = "var(--text-muted)";
-
-                if (diffDays === 0) {
-                    statusText = "🚨 VENCE HOJE!";
-                    statusColor = "var(--danger)";
-                } else if (diffDays > 0 && diffDays <= 5) {
-                    statusText = `⚠️ Vence em ${diffDays} dia(s) (Dia ${fb.day})`;
-                    statusColor = "var(--warning)";
-                } else if (diffDays < 0) {
-                    statusText = `Passou do dia ${fb.day} (Mês atual)`;
-                }
-
-                container.insertAdjacentHTML('beforeend', `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-body); padding:10px 14px; border-radius:8px; border:1px solid var(--border);">
-                        <div>
-                            <strong>${fb.desc}</strong> — <span style="font-size:0.85rem; color:${statusColor}; font-weight:700;">${statusText}</span>
-                        </div>
-                        <div style="font-weight:700; color:var(--primary);">
-                            ${formatCurrency(fb.amount)}
-                        </div>
-                    </div>
-                `);
-            });
-        }
-
-        // --- CARTÕES DE CRÉDITO ---
-        function addCreditCard(e) {
+        function addProduct(e) {
             e.preventDefault();
-            state.creditCards.push({
+            storeState.products.push({
                 id: Date.now(),
-                name: document.getElementById('cardName').value,
-                owner: document.getElementById('cardOwner').value,
-                limit: parseFloat(document.getElementById('cardLimit').value),
-                closingDay: parseInt(document.getElementById('cardClosingDay').value),
-                dueDay: parseInt(document.getElementById('cardDueDay').value)
+                name: document.getElementById('prodName').value,
+                cost: parseFloat(document.getElementById('prodCost').value),
+                price: parseFloat(document.getElementById('prodPrice').value),
+                category: document.getElementById('prodCategory').value
             });
-            saveState();
-            populateAccountSelects();
-            renderCreditCards();
+            saveStoreState();
+            renderProductsTable();
             e.target.reset();
         }
 
-        function renderCreditCards() {
-            const grid = document.getElementById('creditCardsGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-
-            const currentMonthStr = document.getElementById('filterPeriod').value;
-
-            state.creditCards.forEach(c => {
-                const cardAccName = `Cartão: ${c.name}`;
-                const totalSpent = state.transactions
-                    .filter(t => t.account === cardAccName && t.type === 'despesa' && t.date.startsWith(currentMonthStr))
-                    .reduce((a, t) => a + t.amount, 0);
-
-                const availableLimit = Math.max(c.limit - totalSpent, 0);
-
-                grid.insertAdjacentHTML('beforeend', `
-                    <div class="card-panel" style="position:relative; display:flex; flex-direction:column; gap:8px;">
-                        <button class="btn-danger-sm" style="position:absolute; top:16px; right:16px;" onclick="if(confirm('Excluir este cartão?')){state.creditCards=state.creditCards.filter(x=>x.id!=${c.id});saveState();populateAccountSelects();renderCreditCards();}">🗑️</button>
-                        
-                        <span style="font-weight:700; color:var(--text-muted); text-transform:uppercase; font-size:0.85rem;">💳 ${c.name} (${c.owner})</span>
-                        <span style="font-size:1.6rem; font-weight:700; color:var(--danger);">Fatura: ${formatCurrency(totalSpent)}</span>
-                        
-                        <div style="font-size:0.85rem; color:var(--text-muted); display:flex; justify-content:space-between;">
-                            <span>Limite: ${formatCurrency(c.limit)}</span>
-                            <span>Disponível: ${formatCurrency(availableLimit)}</span>
-                        </div>
-
-                        <div style="font-size:0.8rem; color:var(--text-muted); border-top:1px solid var(--border); padding-top:8px; margin-top:4px;">
-                            Fecha dia: <strong>${c.closingDay}</strong> | Vence dia: <strong>${c.dueDay}</strong>
-                        </div>
-                    </div>
+        function renderProductsTable() {
+            const tbody = document.getElementById('productsTable');
+            tbody.innerHTML = '';
+            storeState.products.forEach(p => {
+                const profit = p.price - p.cost;
+                const margin = p.price > 0 ? ((profit / p.price) * 100).toFixed(1) : 0;
+                tbody.insertAdjacentHTML('beforeend', `
+                    <tr>
+                        <td><strong>${p.name}</strong></td>
+                        <td>${p.category}</td>
+                        <td>${formatCurrency(p.cost)}</td>
+                        <td>${formatCurrency(p.price)}</td>
+                        <td><strong style="color:var(--success);">${formatCurrency(profit)} (${margin}%)</strong></td>
+                        <td><button class="btn-danger-sm" onclick="storeState.products=storeState.products.filter(x=>x.id!=${p.id});saveStoreState();renderProductsTable();">🗑️</button></td>
+                    </tr>
                 `);
             });
         }
 
-        // --- PROJEÇÃO DE FLUXO DE CAIXA (6 MESES) ---
-        function renderProjectionChart() {
-            const ctx = document.getElementById('projectionChart').getContext('2d');
-            const monthsLabels = [];
-            const inflowsData = [];
-            const outflowsData = [];
-            const netBalanceData = [];
-
-            const now = new Date();
-            let runningBalance = state.accountsList.reduce((a, b) => a + (b.initialBalance || 0), 0);
-
-            for (let i = 0; i < 6; i++) {
-                const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-                const monthStr = d.toISOString().slice(0, 7);
-                const monthName = d.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' });
-
-                monthsLabels.push(monthName);
-
-                const monthTxs = state.transactions.filter(t => t.date && t.date.startsWith(monthStr));
-                const fixedOutflows = state.fixedBills.reduce((a, b) => a + b.amount, 0);
-
-                const inVal = monthTxs.filter(t => t.type === 'receita').reduce((a, t) => a + t.amount, 0);
-                const outVal = monthTxs.filter(t => t.type === 'despesa').reduce((a, t) => a + t.amount, 0) + (i > 0 ? fixedOutflows : 0);
-
-                runningBalance += (inVal - outVal);
-
-                inflowsData.push(inVal);
-                outflowsData.push(outVal);
-                netBalanceData.push(runningBalance);
-            }
-
-            if (projectionChartInstance) projectionChartInstance.destroy();
-
-            projectionChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: monthsLabels,
-                    datasets: [
-                        { label: 'Entradas Previstas', data: inflowsData, backgroundColor: '#10b981' },
-                        { label: 'Saídas Previstas', data: outflowsData, backgroundColor: '#ef4444' },
-                        { label: 'Saldo Projetado', data: netBalanceData, type: 'line', borderColor: '#2563eb', fill: false, borderWidth: 3 }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        // --- TRANSFERÊNCIAS ---
-        function addTransfer(e) {
+        function addCategory(e) {
             e.preventDefault();
-            const from = document.getElementById('tfFrom').value;
-            const to = document.getElementById('tfTo').value;
-            if (from === to) {
-                alert('A conta de origem e destino não podem ser as mesmas.');
-                return;
+            const name = document.getElementById('newCatName').value.trim();
+            if (name && !storeState.categories.includes(name)) {
+                storeState.categories.push(name);
+                saveStoreState();
+                populateCategoriesSelects();
+                renderCategoriesTable();
+                document.getElementById('newCatName').value = '';
             }
-
-            state.transfers.push({
-                id: Date.now(),
-                from, to,
-                amount: parseFloat(document.getElementById('tfAmount').value),
-                date: document.getElementById('tfDate').value,
-                desc: document.getElementById('tfDesc').value || 'Transferência entre contas'
-            });
-
-            saveState();
-            document.getElementById('tfDesc').value = '';
-            document.getElementById('tfAmount').value = '';
-            document.getElementById('tfDate').value = new Date().toISOString().slice(0, 10);
-            renderTransfersTable();
         }
 
-        function renderTransfersTable() {
-            const tbody = document.getElementById('transfersTable');
-            if (!tbody) return;
+        function renderCategoriesTable() {
+            const tbody = document.getElementById('categoriesTable');
             tbody.innerHTML = '';
-            state.transfers.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(tf => {
+            storeState.categories.forEach(c => {
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr>
-                        <td>${tf.date ? tf.date.split('-').reverse().join('/') : '-'}</td>
-                        <td><strong style="color:var(--danger)">${tf.from}</strong></td>
-                        <td><strong style="color:var(--success)">${tf.to}</strong></td>
-                        <td>${tf.desc}</td>
-                        <td><strong>${formatCurrency(tf.amount)}</strong></td>
-                        <td><button class="btn-danger-sm" onclick="state.transfers=state.transfers.filter(x=>x.id!=${tf.id});saveState();renderTransfersTable();">🗑️</button></td>
+                        <td><strong>${c}</strong></td>
+                        <td><button class="btn-danger-sm" onclick="storeState.categories=storeState.categories.filter(x=>x!=='${c}');saveStoreState();populateCategoriesSelects();renderCategoriesTable();">🗑️</button></td>
                     </tr>
                 `);
-            });
-        }
-
-        // --- CONCILIAÇÃO BANCÁRIA ---
-        function setBankRealBalance(accName, val) {
-            state.bankReconciled[accName] = parseFloat(val) || 0;
-            saveState();
-            renderReconciliationTable();
-        }
-
-        function renderReconciliationTable() {
-            const tbody = document.getElementById('reconciliationTable');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            state.accountsList.forEach(acc => {
-                const initBal = acc.initialBalance || 0;
-                
-                const txIn = state.transactions.filter(t => t.account === acc.bank && t.type === 'receita').reduce((a,t) => a + t.amount, 0);
-                const txOut = state.transactions.filter(t => t.account === acc.bank && t.type === 'despesa').reduce((a,t) => a + t.amount, 0);
-
-                const tfIn = state.transfers.filter(t => t.to === acc.bank).reduce((a,t) => a + t.amount, 0);
-                const tfOut = state.transfers.filter(t => t.from === acc.bank).reduce((a,t) => a + t.amount, 0);
-
-                const calculatedBalance = initBal + txIn - txOut + tfIn - tfOut;
-                const realBalance = state.bankReconciled[acc.bank] !== undefined ? state.bankReconciled[acc.bank] : calculatedBalance;
-                const diff = realBalance - calculatedBalance;
-
-                tbody.insertAdjacentHTML('beforeend', `
-                    <tr>
-                        <td><strong>${acc.bank}</strong></td>
-                        <td>${acc.initialDate ? acc.initialDate.split('-').reverse().join('/') : '-'}</td>
-                        <td>${formatCurrency(initBal)}</td>
-                        <td><span style="color:var(--success)">+${formatCurrency(txIn + tfIn)}</span> / <span style="color:var(--danger)">-${formatCurrency(txOut + tfOut)}</span></td>
-                        <td><strong style="font-size:1rem;">${formatCurrency(calculatedBalance)}</strong></td>
-                        <td>
-                            <input type="number" step="0.01" value="${realBalance}" 
-                                onchange="setBankRealBalance('${acc.bank}', this.value)"
-                                style="width: 120px; padding: 6px; border:1px solid var(--border); border-radius:6px;">
-                        </td>
-                        <td>
-                            ${Math.abs(diff) < 0.01 
-                                ? '<span class="status-ok">✔ Conciliado</span>' 
-                                : `<span class="status-diff">⚠️ Dif: ${formatCurrency(diff)}</span>`
-                            }
-                        </td>
-                        <td>
-                            <button class="btn-outline" style="padding: 4px 8px; font-size: 0.8rem;" onclick="openAccountStatement('${acc.bank}')">🔍 Ver Extrato</button>
-                        </td>
-                    </tr>
-                `);
-            });
-        }
-
-        function openAccountStatement(accName) {
-            document.getElementById('modalAccTitle').innerText = `📑 Extrato Completo: ${accName}`;
-            const tbody = document.getElementById('modalAccountStatementTable');
-            tbody.innerHTML = '';
-
-            const txs = state.transactions.filter(t => t.account === accName).map(t => ({ ...t, isTransfer: false }));
-            
-            const tfOut = state.transfers.filter(t => t.from === accName).map(t => ({
-                id: t.id, date: t.date, desc: `Transferência enviada para ${t.to} (${t.desc})`,
-                amount: t.amount, type: 'despesa', category: 'Transferência'
-            }));
-
-            const tfIn = state.transfers.filter(t => t.to === accName).map(t => ({
-                id: t.id, date: t.date, desc: `Transferência recebida de ${t.from} (${t.desc})`,
-                amount: t.amount, type: 'receita', category: 'Transferência'
-            }));
-
-            const statement = [...txs, ...tfOut, ...tfIn].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            if (statement.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-muted);">Nenhum lançamento ou transferência registrado nesta conta.</td></tr>`;
-            } else {
-                statement.forEach(st => {
-                    tbody.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td><strong>${st.date ? st.date.split('-').reverse().join('/') : '-'}</strong></td>
-                            <td>${st.desc}</td>
-                            <td>${st.category}</td>
-                            <td><span class="tag-type tag-${st.type}">${st.type}</span></td>
-                            <td style="font-weight:700; color:${st.type === 'receita' ? 'var(--success)' : 'var(--danger)'}">
-                                ${st.type === 'receita' ? '+' : '-'} ${formatCurrency(st.amount)}
-                            </td>
-                        </tr>
-                    `);
-                });
-            }
-
-            document.getElementById('accStatementModal').classList.add('active');
-        }
-
-        // --- DASHBOARD & METAS ---
-        function filterTransactionsByPeriod(txs) {
-            const mode = document.getElementById('viewMode').value;
-            const periodVal = document.getElementById('filterPeriod').value;
-            if (!periodVal) return txs;
-
-            return txs.filter(tx => {
-                if (!tx.date) return true;
-                if (mode === 'month') return tx.date.startsWith(periodVal);
-                if (mode === 'year') return tx.date.startsWith(periodVal.slice(0, 4));
-                if (mode === 'day') return tx.date === periodVal;
-                return true;
             });
         }
 
         function updateDashboard() {
-            const filteredTxs = filterTransactionsByPeriod(state.transactions);
+            const periodVal = document.getElementById('filterPeriod').value;
+            const mode = document.getElementById('viewMode').value;
+
+            const filteredTxs = storeState.transactions.filter(t => {
+                if (!t.date || !periodVal) return true;
+                if (mode === 'month') return t.date.startsWith(periodVal);
+                if (mode === 'year') return t.date.startsWith(periodVal.slice(0, 4));
+                return true;
+            });
+
             const inflows = filteredTxs.filter(t => t.type === 'receita').reduce((a, t) => a + t.amount, 0);
             const outflows = filteredTxs.filter(t => t.type === 'despesa').reduce((a, t) => a + t.amount, 0);
 
@@ -1298,378 +591,102 @@
             document.getElementById('totalOutflows').innerText = formatCurrency(outflows);
             document.getElementById('totalBalance').innerText = formatCurrency(inflows - outflows);
 
-            renderDashGoals(filteredTxs);
-            renderDashFixedBills();
-            renderChart(filteredTxs);
+            renderDashReminders();
+            renderDashCategories(filteredTxs);
+            renderChart(inflows, outflows);
         }
 
-        function renderDashGoals(filteredTxs) {
-            const periodVal = document.getElementById('filterPeriod').value.slice(0, 7);
-            const currentGoals = state.goals[periodVal] || {};
-            const container = document.getElementById('dashGoalsList');
-            if (!container) return;
+        function renderDashReminders() {
+            const container = document.getElementById('dashRemindersList');
+            const banner = document.getElementById('reminderAlertBanner');
             container.innerHTML = '';
 
-            state.categories.forEach(cat => {
-                const spent = filteredTxs.filter(t => t.type === 'despesa' && t.category === cat).reduce((a, t) => a + t.amount, 0);
-                const goal = currentGoals[cat] || 0;
-                const percentage = goal > 0 ? Math.min(Math.round((spent / goal) * 100), 100) : (spent > 0 ? 100 : 0);
+            if (storeState.reminders.length === 0) {
+                container.innerHTML = `<span style="color:var(--text-muted); font-size:0.9rem;">Nenhuma conta fixa cadastrada. Vá na aba "Contas Fixas & Lembretes" para adicionar.</span>`;
+                banner.style.display = 'none';
+                return;
+            }
 
-                let pClass = 'progress-ok';
-                if (percentage >= 80 && percentage < 100) pClass = 'progress-warning';
-                if (percentage >= 100 && goal > 0) pClass = 'progress-danger';
+            const today = new Date();
+            const currentDay = today.getDate();
+
+            let hasUpcoming = false;
+            storeState.reminders.sort((a,b) => a.day - b.day).forEach(r => {
+                const diffDays = r.day - currentDay;
+                let statusText = `Vence dia ${r.day}`;
+                let statusColor = "var(--text-muted)";
+
+                if (diffDays === 0) {
+                    statusText = "🚨 VENCE HOJE!";
+                    statusColor = "var(--danger)";
+                    hasUpcoming = true;
+                } else if (diffDays > 0 && diffDays <= 5) {
+                    statusText = `⚠️ Vence em ${diffDays} dia(s) (Dia ${r.day})`;
+                    statusColor = "var(--warning)";
+                    hasUpcoming = true;
+                } else if (diffDays < 0) {
+                    statusText = `Passou do dia ${r.day} (Mês atual)`;
+                }
 
                 container.insertAdjacentHTML('beforeend', `
-                    <div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.9rem; font-weight:600;">
-                            <span class="cat-clickable" onclick="openCatModal('${cat}')">${cat}</span>
-                            <span>${formatCurrency(spent)} / ${goal > 0 ? formatCurrency(goal) : 'Sem Meta'}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-body); padding:10px 14px; border-radius:8px; border:1px solid var(--border);">
+                        <div>
+                            <strong>${r.desc}</strong> — <span style="font-size:0.85rem; color:${statusColor}; font-weight:700;">${statusText}</span>
                         </div>
-                        <div style="width:100%; height:8px; background:#f1f5f9; border-radius:999px; overflow:hidden; margin-top:4px;">
-                            <div class="${pClass}" style="height:100%; width:${goal > 0 ? percentage : (spent > 0 ? 100 : 0)}%"></div>
+                        <div style="font-weight:700; color:var(--primary);">
+                            ${formatCurrency(r.amount)}
                         </div>
                     </div>
                 `);
             });
+
+            if (hasUpcoming) {
+                banner.style.display = 'flex';
+                document.getElementById('reminderAlertText').innerText = "Atenção: Você tem contas fixas vencendo hoje ou nos próximos dias!";
+            } else {
+                banner.style.display = 'none';
+            }
         }
 
-        function renderChart(filteredTxs) {
-            const ctx = document.getElementById('categoryChart').getContext('2d');
-            const catMap = {};
-            filteredTxs.filter(t => t.type === 'despesa').forEach(t => {
-                catMap[t.category] = (catMap[t.category] || 0) + t.amount;
-            });
+        function renderDashCategories(filteredTxs) {
+            const container = document.getElementById('dashCategoriesList');
+            container.innerHTML = '';
 
+            storeState.categories.forEach(cat => {
+                const total = filteredTxs.filter(t => t.category === cat).reduce((a, t) => a + t.amount, 0);
+                if (total > 0) {
+                    container.insertAdjacentHTML('beforeend', `
+                        <div style="display:flex; justify-content:space-between; font-size:0.9rem; font-weight:600; border-bottom:1px solid var(--border); padding-bottom:6px;">
+                            <span>${cat}</span>
+                            <span style="color:var(--primary);">${formatCurrency(total)}</span>
+                        </div>
+                    `);
+                }
+            });
+            if (container.innerHTML === '') {
+                container.innerHTML = `<span style="color:var(--text-muted); font-size:0.9rem;">Nenhuma movimentação neste período.</span>`;
+            }
+        }
+
+        function renderChart(inflows, outflows) {
+            const ctx = document.getElementById('storeChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
 
             chartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(catMap),
-                    datasets: [{ data: Object.values(catMap), backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#64748b'] }]
+                    labels: ['Faturamento', 'Custos / Despesas'],
+                    datasets: [{ data: [inflows, outflows], backgroundColor: ['#10b981', '#ef4444'] }]
                 },
                 options: { responsive: true, maintainAspectRatio: false }
             });
         }
 
-        function addCategory(e) {
-            e.preventDefault();
-            const name = document.getElementById('newCatName').value.trim();
-            if (name && !state.categories.includes(name)) {
-                state.categories.push(name);
-                saveState();
-                populateCategoriesSelects();
-                renderGoalsTable();
-                document.getElementById('newCatName').value = '';
-            }
-        }
-
-        function setGoalViewMode(mode, btn) {
-            currentGoalTableMode = mode;
-            document.getElementById('btnGoalMonth').classList.remove('active');
-            document.getElementById('btnGoalYear').classList.remove('active');
-            btn.classList.add('active');
-
-            const headerTr = document.getElementById('goalsHeader');
-            if (mode === 'month') {
-                headerTr.innerHTML = `
-                    <th>Categoria</th>
-                    <th>Meta Mês Atual (R$)</th>
-                    <th>Gasto Realizado</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                `;
-            } else {
-                headerTr.innerHTML = `
-                    <th>Categoria</th>
-                    <th>Teto Anual (R$)</th>
-                    <th>Total Acumulado no Ano</th>
-                    <th>Status Anual</th>
-                    <th>Ação</th>
-                `;
-            }
-            renderGoalsTable();
-        }
-
-        function renderGoalsTable() {
-            const tbody = document.getElementById('goalsTable');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            const periodVal = document.getElementById('filterPeriod').value;
-            const monthStr = periodVal.slice(0, 7);
-            const yearStr = periodVal.slice(0, 4);
-
-            if (currentGoalTableMode === 'month') {
-                const currentMonthGoals = state.goals[monthStr] || {};
-                const monthTxs = state.transactions.filter(t => t.date && t.date.startsWith(monthStr) && t.type === 'despesa');
-
-                state.categories.forEach(cat => {
-                    const goal = currentMonthGoals[cat] || 0;
-                    const spent = monthTxs.filter(t => t.category === cat).reduce((a, t) => a + t.amount, 0);
-
-                    tbody.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td><strong class="cat-clickable" onclick="openCatModal('${cat}')">${cat}</strong></td>
-                            <td><input type="number" step="50" min="0" value="${goal}" onchange="if(!state.goals['${monthStr}']) state.goals['${monthStr}']={}; state.goals['${monthStr}']['${cat}']=parseFloat(this.value)||0; saveState();" style="width:100px; padding:4px;"></td>
-                            <td>${formatCurrency(spent)}</td>
-                            <td>${goal > 0 ? (spent > goal ? '<span style="color:red; font-weight:bold;">Estourou</span>' : '<span style="color:var(--success); font-weight:bold;">Dentro da Meta</span>') : '<span style="color:var(--text-muted)">Sem Meta</span>'}</td>
-                            <td><button class="btn-danger-sm" onclick="state.categories=state.categories.filter(c=>c!=='${cat}');saveState();populateCategoriesSelects();renderGoalsTable();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            } else {
-                const currentYearGoals = state.annualGoals[yearStr] || {};
-                const yearTxs = state.transactions.filter(t => t.date && t.date.startsWith(yearStr) && t.type === 'despesa');
-
-                state.categories.forEach(cat => {
-                    const goalAnual = currentYearGoals[cat] || 0;
-                    const spentYear = yearTxs.filter(t => t.category === cat).reduce((a, t) => a + t.amount, 0);
-
-                    tbody.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td><strong class="cat-clickable" onclick="openCatModal('${cat}')">${cat}</strong></td>
-                            <td><input type="number" step="100" min="0" value="${goalAnual}" onchange="if(!state.annualGoals['${yearStr}']) state.annualGoals['${yearStr}']={}; state.annualGoals['${yearStr}']['${cat}']=parseFloat(this.value)||0; saveState();" style="width:110px; padding:4px;"></td>
-                            <td>${formatCurrency(spentYear)}</td>
-                            <td>${goalAnual > 0 ? (spentYear > goalAnual ? '<span style="color:red; font-weight:bold;">Estourou Teto Anual</span>' : '<span style="color:var(--success); font-weight:bold;">Ok no Ano</span>') : '<span style="color:var(--text-muted)">Sem Teto</span>'}</td>
-                            <td><button class="btn-danger-sm" onclick="state.categories=state.categories.filter(c=>c!=='${cat}');saveState();populateCategoriesSelects();renderGoalsTable();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            }
-        }
-
-        // --- MODAIS ---
-        function openCatModal(catName) {
-            const periodVal = document.getElementById('filterPeriod').value;
-            const monthStr = periodVal.slice(0, 7);
-            const yearStr = periodVal.slice(0, 4);
-
-            document.getElementById('modalCatTitle').innerText = `📊 Detalhamento: ${catName}`;
-
-            const monthSpent = state.transactions
-                .filter(t => t.date && t.date.startsWith(monthStr) && t.category === catName && t.type === 'despesa')
-                .reduce((a, t) => a + t.amount, 0);
-            const monthGoal = (state.goals[monthStr] || {})[catName] || 0;
-
-            document.getElementById('modalMonthSpent').innerText = formatCurrency(monthSpent);
-            document.getElementById('modalMonthGoalText').innerText = `Meta Mês: ${monthGoal > 0 ? formatCurrency(monthGoal) : 'Sem Meta'}`;
-
-            const yearSpent = state.transactions
-                .filter(t => t.date && t.date.startsWith(yearStr) && t.category === catName && t.type === 'despesa')
-                .reduce((a, t) => a + t.amount, 0);
-            const yearGoal = (state.annualGoals[yearStr] || {})[catName] || 0;
-
-            document.getElementById('modalYearSpent').innerText = formatCurrency(yearSpent);
-            document.getElementById('modalYearGoalText').innerText = `Teto Anual: ${yearGoal > 0 ? formatCurrency(yearGoal) : 'Sem Teto'}`;
-
-            const adviceBox = document.getElementById('modalAdviceBox');
-            if (yearGoal > 0) {
-                const remainingYear = yearGoal - yearSpent;
-                const currentMonthNum = parseInt(monthStr.split('-')[1]);
-                const remainingMonths = 12 - currentMonthNum + 1;
-                const monthlyAllowance = remainingYear > 0 ? (remainingYear / remainingMonths) : 0;
-
-                if (remainingYear <= 0) {
-                    adviceBox.innerHTML = `⚠️ <strong>Atenção:</strong> Você atingiu/estourou o teto de <strong>${formatCurrency(yearGoal)}</strong> previsto para o ano de ${yearStr}.`;
-                } else {
-                    adviceBox.innerHTML = `💡 Tem <strong>${formatCurrency(remainingYear)}</strong> disponíveis no teto de ${yearStr}. A média ideal para não estourar é gastar até <strong>${formatCurrency(monthlyAllowance)}/mês</strong> nos ${remainingMonths} meses restantes.`;
-                }
-            } else {
-                adviceBox.innerHTML = `💡 Defina um <strong>Teto Anual</strong> para a categoria <strong>${catName}</strong> na aba de Metas (Visão Anual Teto) para receber projeções personalizadas.`;
-            }
-
-            const tbody = document.getElementById('modalHistoryTable');
-            tbody.innerHTML = '';
-            const monthsNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-            
-            for (let i = 1; i <= 12; i++) {
-                const mTwoDigits = i < 10 ? `0${i}` : `${i}`;
-                const iterMonthStr = `${yearStr}-${mTwoDigits}`;
-
-                const mSpent = state.transactions
-                    .filter(t => t.date && t.date.startsWith(iterMonthStr) && t.category === catName && t.type === 'despesa')
-                    .reduce((a, t) => a + t.amount, 0);
-                const mGoal = (state.goals[iterMonthStr] || {})[catName] || 0;
-
-                tbody.insertAdjacentHTML('beforeend', `
-                    <tr>
-                        <td><strong>${monthsNames[i-1]} / ${yearStr}</strong></td>
-                        <td>${formatCurrency(mSpent)}</td>
-                        <td>${mGoal > 0 ? formatCurrency(mGoal) : '-'}</td>
-                        <td>${mGoal > 0 ? (mSpent > mGoal ? '<span style="color:red">Estourou</span>' : '<span style="color:var(--success)">Ok</span>') : '-'}</td>
-                    </tr>
-                `);
-            }
-
-            document.getElementById('catModalOverlay').classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        // --- CONTAS, CARTÕES & PIX ---
-        function addBankAccount(e) {
-            e.preventDefault();
-            state.accountsList.push({
-                id: Date.now(),
-                bank: document.getElementById('accBank').value,
-                owner: document.getElementById('accOwner').value,
-                initialBalance: parseFloat(document.getElementById('accInitialBalance').value) || 0,
-                initialDate: document.getElementById('accInitialDate').value,
-                purpose: document.getElementById('accPurpose').value
-            });
-            saveState();
-            populateAccountSelects();
-            renderAccountsAndPix();
-            e.target.reset();
-        }
-
-        function addPix(e) {
-            e.preventDefault();
-            state.pixList.push({
-                id: Date.now(),
-                owner: document.getElementById('pixOwner').value,
-                bank: document.getElementById('pixBank').value,
-                key: document.getElementById('pixKey').value
-            });
-            saveState();
-            renderAccountsAndPix();
-            e.target.reset();
-        }
-
-        function renderAccountsAndPix() {
-            const aTable = document.getElementById('accountsTable');
-            if (aTable) {
-                aTable.innerHTML = '';
-                state.accountsList.forEach(a => {
-                    aTable.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td><strong>${a.bank}</strong></td>
-                            <td>${a.owner}</td>
-                            <td>${a.initialDate ? a.initialDate.split('-').reverse().join('/') : '-'}</td>
-                            <td>${formatCurrency(a.initialBalance || 0)}</td>
-                            <td>${a.purpose}</td>
-                            <td><button class="btn-danger-sm" onclick="state.accountsList=state.accountsList.filter(x=>x.id!=${a.id});saveState();populateAccountSelects();renderAccountsAndPix();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            }
-
-            const pTable = document.getElementById('pixTable');
-            if (pTable) {
-                pTable.innerHTML = '';
-                state.pixList.forEach(p => {
-                    pTable.insertAdjacentHTML('beforeend', `
-                        <tr>
-                            <td>${p.owner}</td>
-                            <td>${p.bank}</td>
-                            <td><code>${p.key}</code> <button class="btn-outline" style="padding:2px 6px; font-size:0.75rem" onclick="navigator.clipboard.writeText('${p.key}')">Copiar</button></td>
-                            <td><button class="btn-danger-sm" onclick="state.pixList=state.pixList.filter(x=>x.id!=${p.id});saveState();renderAccountsAndPix();">🗑️</button></td>
-                        </tr>
-                    `);
-                });
-            }
-        }
-
-        // --- CAIXINHAS & SIMULADOR DE TEMPO ---
-        function addVault(e) {
-            e.preventDefault();
-            state.vaultsList.push({
-                id: Date.now(),
-                name: document.getElementById('vaultName').value,
-                current: parseFloat(document.getElementById('vaultCurrent').value),
-                goal: parseFloat(document.getElementById('vaultGoal').value),
-                monthlyDeposit: parseFloat(document.getElementById('vaultMonthlyDeposit').value) || 0,
-                history: []
-            });
-            saveState();
-            renderVaults();
-            e.target.reset();
-        }
-
-        function depositVault(id) {
-            const val = parseFloat(prompt("Quanto deseja guardar nesta caixinha (R$)?"));
-            if (val && val > 0) {
-                const vault = state.vaultsList.find(v => v.id === id);
-                if (vault) {
-                    vault.current += val;
-                    if (!vault.history) vault.history = [];
-                    vault.history.push({ date: new Date().toISOString().slice(0, 10), amount: val, type: 'deposit' });
-                    saveState();
-                    renderVaults();
-                }
-            }
-        }
-
-        function withdrawVault(id) {
-            const val = parseFloat(prompt("Quanto deseja retirar desta caixinha (R$)?"));
-            if (val && val > 0) {
-                const vault = state.vaultsList.find(v => v.id === id);
-                if (vault) {
-                    if (val > vault.current) {
-                        alert("O valor de retirada é maior do que o saldo guardado!");
-                        return;
-                    }
-                    vault.current -= val;
-                    if (!vault.history) vault.history = [];
-                    vault.history.push({ date: new Date().toISOString().slice(0, 10), amount: val, type: 'withdraw' });
-                    saveState();
-                    renderVaults();
-                }
-            }
-        }
-
-        function renderVaults() {
-            const grid = document.getElementById('vaultsGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            state.vaultsList.forEach(v => {
-                const pct = Math.min(Math.round((v.current / v.goal) * 100), 100);
-                const remainingVal = Math.max(v.goal - v.current, 0);
-
-                let monthsToGoalText = "Alcançado!";
-                if (remainingVal > 0) {
-                    if (v.monthlyDeposit && v.monthlyDeposit > 0) {
-                        const monthsNeeded = Math.ceil(remainingVal / v.monthlyDeposit);
-                        monthsToGoalText = `Faltam aprox. <strong>${monthsNeeded} meses</strong> (${(monthsNeeded/12).toFixed(1)} anos) guardando ${formatCurrency(v.monthlyDeposit)}/mês`;
-                    } else {
-                        monthsToGoalText = "Informe o aporte mensal para ver a previsão";
-                    }
-                }
-
-                grid.insertAdjacentHTML('beforeend', `
-                    <div class="card-panel" style="position:relative; display:flex; flex-direction:column; gap:8px;">
-                        <button class="btn-danger-sm" style="position:absolute; top:16px; right:16px;" onclick="if(confirm('Excluir esta caixinha?')){state.vaultsList=state.vaultsList.filter(x=>x.id!=${v.id});saveState();renderVaults();}">🗑️</button>
-                        
-                        <span style="font-weight:700; color:var(--text-muted); text-transform:uppercase; font-size:0.85rem;">🐷 ${v.name}</span>
-                        <span style="font-size:1.8rem; font-weight:700; color:var(--primary);">${formatCurrency(v.current)}</span>
-                        
-                        <span style="font-size:0.85rem; color:var(--text-muted);">Meta: ${formatCurrency(v.goal)} (${pct}%)</span>
-                        
-                        <div style="width:100%; height:10px; background:#f1f5f9; border-radius:999px; overflow:hidden; margin: 4px 0 6px 0;">
-                            <div style="height:100%; width:${pct}%; background-color:var(--success);"></div>
-                        </div>
-
-                        <div style="font-size:0.78rem; color:#1e40af; background:var(--primary-light); padding:6px 10px; border-radius:6px; margin-bottom:8px;">
-                            🔮 ${monthsToGoalText}
-                        </div>
-
-                        <div style="display:flex; gap:8px;">
-                            <button class="btn-primary" style="flex:1; padding:6px 10px; font-size:0.8rem;" onclick="depositVault(${v.id})">➕ Guardar +R$</button>
-                            <button class="btn-outline" style="flex:1; padding:6px 10px; font-size:0.8rem; color:var(--danger);" onclick="withdrawVault(${v.id})">➖ Retirar -R$</button>
-                        </div>
-                    </div>
-                `);
-            });
-        }
-
-        // --- BACKUP & CÓDIGO FONTE ---
         function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storeState));
             const a = document.createElement('a');
             a.href = dataStr;
-            a.download = `backup_lisossomos_${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `backup_bsb_finance_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
         }
 
@@ -1677,16 +694,15 @@
             const reader = new FileReader();
             reader.onload = function(evt) {
                 try {
-                    state = JSON.parse(evt.target.result);
-                    saveState();
-                    populateAccountSelects();
+                    storeState = JSON.parse(evt.target.result);
+                    saveStoreState();
                     populateCategoriesSelects();
-                    checkUpcomingAlerts();
                     updateDashboard();
                     renderTransactionsTable();
-                    renderFixedBillsTable();
+                    renderRemindersTable();
+                    renderProductsTable();
                     alert('Backup restaurado com sucesso!');
-                } catch { alert('Arquivo de backup inválido.'); }
+                } catch { alert('Arquivo inválido.'); }
             };
             reader.readAsText(e.target.files[0]);
         }
@@ -1702,7 +718,7 @@
             const box = document.getElementById('sourceCodeBox');
             box.select();
             document.execCommand('copy');
-            alert('Código fonte copiado para a área de transferência! Podes colar diretamente no GitHub.');
+            alert('Código fonte copiado! Podes colar diretamente no GitHub.');
         }
     </script>
 </body>
